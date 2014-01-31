@@ -19,3 +19,6 @@ DerivedData
 
 #CocoaPods
 Pods
+
+#ios-trello
+TRSensitiveConfigs.h
