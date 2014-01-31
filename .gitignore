@@ -21,4 +21,4 @@ DerivedData
 Pods
 
 #ios-trello
-TRSensitiveConfigs.h
+IOSTrello/Resources/TRSensitiveConfigs.h
