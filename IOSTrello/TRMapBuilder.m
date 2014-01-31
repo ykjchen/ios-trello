@@ -1,0 +1,189 @@
+//
+//  TRMapBuilder.m
+//  iOS Trello
+//
+//  Created by Joseph Chen on 1/27/14.
+//  Copyright (c) 2014 Joseph Chen. All rights reserved.
+//
+
+#import "TRMapBuilder.h"
+
+#import <RestKit/RestKit.h>
+
+@interface TRMapBuilder ()
+
+@property (strong, nonatomic) void (^buildHandler)(BOOL success, NSError *error);
+@property (strong, nonatomic) RKObjectManager *objectManager;
+@property (strong, nonatomic) NSString *mappingDefinitionsFilename;
+@property (nonatomic, getter = isMappingComplete) BOOL mappingComplete;
+@property (strong, nonatomic) NSArray *mappingDefinitions;
+
+@end
+
+@implementation TRMapBuilder
+
+- (id)initWithFile:(NSString *)mappingDefinitionsFilename
+     objectManager:(RKObjectManager *)objectManager
+{
+    if (self = [super init]) {
+        _mappingDefinitionsFilename = mappingDefinitionsFilename;
+        _objectManager = objectManager;
+    }
+    return self;
+}
+
+- (void)setBuildHandler:(void (^)(BOOL, NSError *))buildHandler
+{
+    if (_buildHandler == buildHandler) {
+        return;
+    }
+    
+    _buildHandler = buildHandler;
+    
+    if (buildHandler) {
+        if (self.isMappingComplete) {
+            buildHandler(YES, nil);
+        } else {
+            [self startMapping];
+        }
+    }
+}
+
+- (NSArray *)mappingDefinitions
+{
+    if (!_mappingDefinitions && self.mappingDefinitionsFilename) {
+        NSString *path = [[NSBundle mainBundle] pathForResource:[self.mappingDefinitionsFilename stringByDeletingPathExtension]
+                                                         ofType:[self.mappingDefinitionsFilename pathExtension]];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+            _mappingDefinitions = [[NSArray alloc] initWithContentsOfFile:path];
+        }
+    }
+    return _mappingDefinitions;
+}
+
+- (void)startMapping
+{
+    [self buildErrorMapping];
+    
+    NSLog(@"mappingDefinitions: %@", self.mappingDefinitions);
+    for (NSDictionary *entityMappingDefinitions in self.mappingDefinitions) {
+        NSString *entityName = entityMappingDefinitions[@"entity"];
+        NSDictionary *attributes = entityMappingDefinitions[@"attributes"];
+        NSArray *identificationAttributes = entityMappingDefinitions[@"identificationAttributes"];
+        NSArray *responseDescriptors = entityMappingDefinitions[@"responseDescriptors"];
+        NSArray *connectionDescriptions = entityMappingDefinitions[@"connectionDescriptions"];
+        
+        RKEntityMapping *mapping = [self buildMappingForEntity:entityName attributes:attributes identificationAttributes:identificationAttributes];
+        
+        [self addResponseDescriptors:responseDescriptors forMapping:mapping];
+        [self addConnectionDescriptions:connectionDescriptions forEntity:entityName mapping:mapping];
+    }
+    
+    [self completedMapping];
+}
+
+- (void)completedMapping
+{
+    if (!self.isMappingComplete) {
+        self.mappingComplete = YES;
+        
+        if (self.buildHandler) {
+            self.buildHandler(YES, nil);
+            self.buildHandler = nil;
+        }
+    }
+}
+
+- (void)addResponseDescriptors:(NSArray *)responseDescriptorInfos forMapping:(RKEntityMapping *)mapping
+{
+    NSIndexSet *successStatusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful); // Anything in 2xx
+
+    // responseDescriptorInfo has keys @"pathPattern" and @"requestMethod"
+    for (NSDictionary *responseDescriptorInfo in responseDescriptorInfos) {
+        NSString *pathPattern = responseDescriptorInfo[@"pathPattern"];
+        NSString *requestMethod = responseDescriptorInfo[@"requestMethod"];
+        NSString *keyPath = responseDescriptorInfo[@"keyPath"];
+        
+        RKResponseDescriptor *descriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping
+                                                                                          method:[self requestMethodFromString:requestMethod]
+                                                                                     pathPattern:pathPattern
+                                                                                         keyPath:keyPath
+                                                                                     statusCodes:successStatusCodes];
+        [self.objectManager addResponseDescriptor:descriptor];
+    }
+}
+
+- (void)addConnectionDescriptions:(NSArray *)connectionDescriptionInfos forEntity:(NSString *)entityName mapping:(RKEntityMapping *)mapping
+{
+    if (connectionDescriptionInfos.count == 0) {
+        return;
+    }
+    
+    // Relationship Mapping
+    NSEntityDescription *memberEntity = [NSEntityDescription entityForName:entityName
+                                                    inManagedObjectContext:self.objectManager.managedObjectStore.mainQueueManagedObjectContext];
+    
+    for (NSDictionary *connectionDescriptionInfo in connectionDescriptionInfos) {
+        NSString *relationshipName = connectionDescriptionInfo[@"relationship"];
+        NSDictionary *attributes = connectionDescriptionInfo[@"attributes"];
+        NSRelationshipDescription *relationshipDescription = [memberEntity relationshipsByName][relationshipName];
+        RKConnectionDescription *connection = [[RKConnectionDescription alloc] initWithRelationship:relationshipDescription
+                                                                                         attributes:attributes];
+        [mapping addConnection:connection];
+    }
+}
+
+- (RKRequestMethod)requestMethodFromString:(NSString *)requestMethodString
+{
+    if ([requestMethodString isCaseInsensitiveEqualToString:@"GET"]) {
+        return RKRequestMethodGET;
+    } else if ([requestMethodString isCaseInsensitiveEqualToString:@"POST"]) {
+        return RKRequestMethodPOST;
+    } else if ([requestMethodString isCaseInsensitiveEqualToString:@"PUT"]) {
+        return RKRequestMethodPUT;
+    } else if ([requestMethodString isCaseInsensitiveEqualToString:@"DELETE"]) {
+        return RKRequestMethodDELETE;
+    } else if ([requestMethodString isCaseInsensitiveEqualToString:@"ANY"]) {
+        return RKRequestMethodAny;
+    }
+    
+    [NSException raise:@"Unsupported request method: " format:@"%@", requestMethodString];
+    return RKRequestMethodAny;
+}
+
+- (RKEntityMapping *)buildMappingForEntity:(NSString *)entityName attributes:(NSDictionary *)attributes identificationAttributes:(NSArray *)identificationAttributes
+{
+    RKEntityMapping* entityMapping = [RKEntityMapping mappingForEntityForName:entityName
+                                                         inManagedObjectStore:self.objectManager.managedObjectStore];
+    [entityMapping addAttributeMappingsFromDictionary:attributes];
+    entityMapping.identificationAttributes = identificationAttributes;
+    
+    return entityMapping;
+}
+
+// https://github.com/RestKit/RestKit#map-a-client-error-response-to-an-nserror
+- (void)buildErrorMapping
+{
+    // Error Mapping
+    // Error JSON looks like {"errors": "Some Error Has Occurred"}
+    RKObjectMapping *errorMapping = [RKObjectMapping mappingForClass:[RKErrorMessage class]];
+    // The entire value at the source key path containing the errors maps to the message
+    [errorMapping addPropertyMapping:[RKAttributeMapping attributeMappingFromKeyPath:nil toKeyPath:@"errorMessage"]];
+    NSIndexSet *errorStatusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassClientError);
+    // Any response in the 4xx status code range with an "errors" key path uses this mapping
+    RKResponseDescriptor *errorDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:errorMapping method:RKRequestMethodAny pathPattern:nil keyPath:@"errors" statusCodes:errorStatusCodes];
+    
+    // Add our descriptors to the manager
+    [self.objectManager addResponseDescriptor:errorDescriptor];
+}
+
+@end
+
+@implementation NSString (TRMapBuilder)
+
+- (BOOL)isCaseInsensitiveEqualToString:(NSString *)string
+{
+    return ([self compare:string options:NSCaseInsensitiveSearch] == NSOrderedSame);
+}
+
+@end
