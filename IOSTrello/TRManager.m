@@ -216,7 +216,23 @@ static TRManager *_sharedManager = nil;
 - (void)deauthorize
 {
     // remove remote authorization data
-    
+    // this fails:
+    /*
+    NSString *token = [self authorizationToken];
+    NSString *path = [NSString stringWithFormat:@"tokens/%@", token];
+    [self.objectManager deleteObject:nil
+                                path:path
+                          parameters:[TRManagedObject parametersWithParameters:nil]
+                             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+#if DEBUG
+                                 NSLog(@"Successfully deleted oauth token.");
+#endif
+                             } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+#if DEBUG
+                                 NSLog(@"Failed to delete oauth token");
+#endif
+                             }];
+     */
     
     // remove local authorization data
     [GTMOAuthViewControllerTouch removeParamsFromKeychainForName:TRAPIServiceName];
