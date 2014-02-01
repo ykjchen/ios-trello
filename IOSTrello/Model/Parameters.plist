@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>TRMember</key>
+	<dict>
+		<key>fields</key>
+		<string>fullName,bio,initials,username,id,url</string>
+		<key>boards</key>
+		<string>all</string>
+		<key>board_fields</key>
+		<string>name,desc,closed,pinned,url</string>
+	</dict>
+	<key>TRBoard</key>
+	<dict>
+		<key>fields</key>
+		<string>name,desc,closed,pinned,url</string>
+		<key>members</key>
+		<string>all</string>
+		<key>member_fields</key>
+		<string>fullName,bio,initials,username,id,url</string>
+	</dict>
+</dict>
+</plist>

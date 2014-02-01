@@ -8,6 +8,7 @@
 
 #import "TRMapBuilder.h"
 
+#import "TRHelpers.h"
 #import <RestKit/RestKit.h>
 
 @interface TRMapBuilder ()
@@ -87,6 +88,7 @@
 {
     [self buildErrorMapping];
     
+    NSMutableDictionary *mappings = [NSMutableDictionary dictionaryWithCapacity:self.mappingDefinitions.count];
     for (NSDictionary *entityMappingDefinitions in self.mappingDefinitions) {
         NSString *entityName = entityMappingDefinitions[@"entity"];
         NSDictionary *attributes = entityMappingDefinitions[@"attributes"];
@@ -98,6 +100,19 @@
         
         [self addResponseDescriptors:responseDescriptors forMapping:mapping];
         [self addConnectionDescriptions:connectionDescriptions forEntity:entityName mapping:mapping];
+        
+        [mappings setObject:mapping forKey:entityName];
+    }
+    
+    for (NSDictionary *entityMappingDefinitions in self.mappingDefinitions) {
+        NSString *entityName = entityMappingDefinitions[@"entity"];
+        NSArray *relationships = entityMappingDefinitions[@"relationships"];
+        RKEntityMapping *mapping = mappings[entityName];
+        if (relationships.count != 0) {
+            [self addRelationships:relationships
+                 withSourceMapping:mapping
+                          mappings:mappings];
+        }
     }
     
     [self completedMapping];
@@ -131,6 +146,19 @@
                                                                                          keyPath:keyPath
                                                                                      statusCodes:successStatusCodes];
         [self.objectManager addResponseDescriptor:descriptor];
+    }
+}
+
+- (void)addRelationships:(NSArray *)relationshipInfos
+       withSourceMapping:(RKEntityMapping *)sourceMapping
+                mappings:(NSDictionary *)allEntityMappings
+{
+    for (NSDictionary *relationshipInfo in relationshipInfos) {
+        NSString *destinationEntityName = relationshipInfo[@"destinationEntity"];
+        NSString *relationship = relationshipInfo[@"relationship"];
+        RKEntityMapping *destinationMapping = allEntityMappings[destinationEntityName];
+        [sourceMapping addRelationshipMappingWithSourceKeyPath:relationship
+                                                       mapping:destinationMapping];
     }
 }
 
@@ -181,6 +209,7 @@
     RKEntityMapping* entityMapping = [RKEntityMapping mappingForEntityForName:entityName
                                                          inManagedObjectStore:self.objectManager.managedObjectStore];
     [entityMapping addAttributeMappingsFromDictionary:attributes];
+
     entityMapping.identificationAttributes = identificationAttributes;
     
     return entityMapping;

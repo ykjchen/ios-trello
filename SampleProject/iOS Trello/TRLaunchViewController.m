@@ -98,7 +98,7 @@
 - (void)tappedLocalMemberButton
 {
     [TRMember getLocalMemberWithSuccess:^(TRMember *member) {
-        NSLog(@"GET local member: %@", member);
+        NSLog(@"GET local member:%@ boards:%i", member, member.boards.count);
     } failure:^(NSError *error) {
         NSLog(@"Failed to GET local member: %@", error.localizedDescription);
     }];

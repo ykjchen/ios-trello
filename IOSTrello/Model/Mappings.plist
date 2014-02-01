@@ -22,6 +22,15 @@
 			<key>idBoards</key>
 			<string>idBoards</string>
 		</dict>
+		<key>relationships</key>
+		<array>
+			<dict>
+				<key>relationship</key>
+				<string>boards</string>
+				<key>destinationEntity</key>
+				<string>TRBoard</string>
+			</dict>
+		</array>
 		<key>identificationAttributes</key>
 		<array>
 			<string>identifier</string>
@@ -39,18 +48,6 @@
 				<string>members/:identifier</string>
 				<key>requestMethod</key>
 				<string>GET</string>
-			</dict>
-		</array>
-		<key>connectionDescriptions</key>
-		<array>
-			<dict>
-				<key>relationship</key>
-				<string>boards</string>
-				<key>attributes</key>
-				<dict>
-					<key>idBoards</key>
-					<string>identifier</string>
-				</dict>
 			</dict>
 		</array>
 	</dict>
@@ -72,6 +69,15 @@
 			<key>id</key>
 			<string>identifier</string>
 		</dict>
+		<key>relationships</key>
+		<array>
+			<dict>
+				<key>relationship</key>
+				<string>members</string>
+				<key>destinationEntity</key>
+				<string>TRMember</string>
+			</dict>
+		</array>
 		<key>identificationAttributes</key>
 		<array>
 			<string>identifier</string>

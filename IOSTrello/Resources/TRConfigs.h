@@ -9,6 +9,11 @@
 #define MAPPING_DEFINITIONS_FILENAME @"Mappings.plist"
 
 /*!
+ * This refers to the file containing request parameters by entity.
+ */
+#define REQUEST_PARAMETERS_FILENAME @"Parameters.plist"
+
+/*!
  * This is the Trello API's base url.
  */
 #define API_BASE_URL @"https://api.trello.com/1/"

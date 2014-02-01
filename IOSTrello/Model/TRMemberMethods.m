@@ -9,12 +9,14 @@
 #import "TRMemberMethods.h"
 
 #import <RestKit/RestKit.h>
+#import "TRConfigs.h"
 
 // constants
 NSString *const TRUserDefaultLocalMemberId = @"LocalMemberId";
 
 // class variables
 static TRMember *_localMember = nil;
+static NSDictionary *_requestParameters = nil;
 
 @implementation TRMember (CustomMethods)
 
@@ -83,14 +85,25 @@ static TRMember *_localMember = nil;
 
 #pragma mark - Requesting
 
++ (NSDictionary *)requestParameters
+{
+    if (!_requestParameters) {
+        NSString *path = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:REQUEST_PARAMETERS_FILENAME];
+        NSDictionary *parameters = [NSDictionary dictionaryWithContentsOfFile:path];
+        _requestParameters = [[NSDictionary alloc] initWithDictionary:parameters[@"TRMember"]];
+    }
+    return _requestParameters;
+}
+
 + (void)getLocalMemberWithSuccess:(void (^)(TRMember *))success
                           failure:(void (^)(NSError *))failure
 {
+    TRLog(@"TRMember class : %@", self);
     NSAssert([self objectManager], @"Class' objectManager not set.");
     
     [[self objectManager] getObject:nil
                              path:@"members/me"
-                       parameters:[self parametersWithParameters:nil]
+                       parameters:[self parametersWithParameters:[self requestParameters]]
                           success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                               TRMember *member = [mappingResult firstObject];
                               [self setLocalMember:member];
@@ -109,7 +122,7 @@ static TRMember *_localMember = nil;
     NSString *path = [NSString stringWithFormat:@"members/%@", identifier];
     [[self objectManager] getObject:nil
                                path:path
-                         parameters:[self parametersWithParameters:nil]
+                         parameters:[self parametersWithParameters:[self requestParameters]]
                             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                 success([mappingResult firstObject]);
                             } failure:^(RKObjectRequestOperation *operation, NSError *error) {

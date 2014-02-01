@@ -195,9 +195,6 @@ static TRManager *_sharedManager = nil;
 #endif
 }
 
-#pragma mark - API Requests
-
-
 #pragma mark - Authorization with GTMOAuth
 #pragma mark Public
 - (BOOL)isAuthorized
