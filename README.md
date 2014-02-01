@@ -1,7 +1,7 @@
 ios-trello
 ==========
 
-This project is an iOS wrapper for the [Trello API](https://trello.com/docs/index.html).
+This project is an iOS wrapper for the [Trello REST API](https://trello.com/docs/index.html), making good use of [RestKit](http://restkit.org/).
 
 ARC and non-ARC are/will be supported.
 
