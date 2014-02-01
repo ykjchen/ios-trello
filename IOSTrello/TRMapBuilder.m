@@ -52,7 +52,13 @@
         return;
     }
     
+#if !__has_feature(objc_arc)
+    [_buildHandler release];
+#endif
     _buildHandler = buildHandler;
+#if !__has_feature(objc_arc)
+    [_buildHandler retain];
+#endif
     
     if (buildHandler) {
         if (self.isMappingComplete) {

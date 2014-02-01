@@ -8,6 +8,10 @@
 
 #import <XCTest/XCTest.h>
 
+#import <RestKit/RestKit.h>
+#import "TRConfigs.h"
+#import "TRMapBuilder.h"
+
 @interface iOS_TrelloTests : XCTestCase
 
 @end
@@ -26,9 +30,11 @@
     [super tearDown];
 }
 
-- (void)testExample
+- (void)testMapBuilder
 {
-    XCTFail(@"No implementation for \"%s\"", __PRETTY_FUNCTION__);
+    RKObjectManager *objectManager = [RKObjectManager al]
+    TRMapBuilder *mapBuilder = [[TRMapBuilder alloc] initWithFile:MAPPING_DEFINITIONS_FILENAME
+                                                    objectManager:<#(RKObjectManager *)#>]
 }
 
 @end

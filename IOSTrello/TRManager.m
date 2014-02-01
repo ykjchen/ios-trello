@@ -212,6 +212,10 @@ static TRManager *_sharedManager = nil;
 
 - (void)deauthorize
 {
+    // remove remote authorization data
+    
+    
+    // remove local authorization data
     [GTMOAuthViewControllerTouch removeParamsFromKeychainForName:TRAPIServiceName];
     [self removeAuthentication];
     [TRMember clearLocalMember];
@@ -282,18 +286,18 @@ static TRManager *_sharedManager = nil;
       finishedWithAuth:(GTMOAuthAuthentication *)auth
                  error:(NSError *)error {
     if (error != nil) {
-        // Authorization failed
 #if DEBUG
         NSLog(@"Authorization failed: %@", error.localizedDescription);
 #endif
+        
         if (self.authorizationHandler) {
             self.authorizationHandler(NO, error);
         }
     } else {
-        // Authorization succeeded
 #if DEBUG
         NSLog(@"Authorization succeeded.");
 #endif
+        
         [TRMember getLocalMemberWithSuccess:^(TRMember *member) {
             if (self.authorizationHandler) {
                 self.authorizationHandler(YES, nil);
