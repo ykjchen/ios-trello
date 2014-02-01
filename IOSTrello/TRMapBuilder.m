@@ -146,7 +146,7 @@
     } else if ([requestMethodString isCaseInsensitiveEqualToString:@"ANY"]) {
         return RKRequestMethodAny;
     }
-    
+
     [NSException raise:@"Unsupported request method: " format:@"%@", requestMethodString];
     return RKRequestMethodAny;
 }
@@ -171,7 +171,11 @@
     [errorMapping addPropertyMapping:[RKAttributeMapping attributeMappingFromKeyPath:nil toKeyPath:@"errorMessage"]];
     NSIndexSet *errorStatusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassClientError);
     // Any response in the 4xx status code range with an "errors" key path uses this mapping
-    RKResponseDescriptor *errorDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:errorMapping method:RKRequestMethodAny pathPattern:nil keyPath:@"errors" statusCodes:errorStatusCodes];
+    RKResponseDescriptor *errorDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:errorMapping
+                                                                                         method:RKRequestMethodAny
+                                                                                    pathPattern:nil
+                                                                                        keyPath:@"errors"
+                                                                                    statusCodes:errorStatusCodes];
     
     // Add our descriptors to the manager
     [self.objectManager addResponseDescriptor:errorDescriptor];

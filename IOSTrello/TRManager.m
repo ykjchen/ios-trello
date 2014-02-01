@@ -220,16 +220,21 @@ static TRManager *_sharedManager = nil;
     return result;
 }
 
-- (NSArray *)allMembers
-{
-    return [self fetchObjectsForKey:@"TRMember"
-                          predicate:nil
-                     sortDescriptor:nil
-                      sortAscending:NO
-                         fetchLimit:0];
-}
-
 #pragma mark - API Url Generation
+
+/*!
+ * This adds authorization parameters onto the passed in parameters.
+ */
+- (NSDictionary *)parametersWithParameters:(NSDictionary *)parameters
+{
+    NSMutableDictionary *authorizationParameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                                    API_DEVELOPER_KEY, @"key",
+                                                    self.authentication.token, @"token", nil];
+    if (parameters) {
+        [authorizationParameters addEntriesFromDictionary:parameters];
+    }
+    return [NSDictionary dictionaryWithDictionary:authorizationParameters];
+}
 
 - (NSURL *)urlWithPath:(NSString *)path parameters:(NSDictionary *)parameters
 {
@@ -265,7 +270,6 @@ static TRManager *_sharedManager = nil;
     if (_localMember == localMember) {
         return;
     }
-    
     _localMember = localMember;
 }
 
@@ -294,23 +298,25 @@ static TRManager *_sharedManager = nil;
 
 - (void)getLocalMember
 {
-    NSURLRequest *request = [NSURLRequest requestWithURL:[self urlWithPath:@"members/me"
-                                                                parameters:nil]];
-    RKManagedObjectRequestOperation *operation = [[RKManagedObjectRequestOperation alloc] initWithRequest:request
-                                                                                      responseDescriptors:self.objectManager.responseDescriptors];
-    operation.managedObjectContext = [self context];
-    operation.managedObjectCache = self.objectManager.managedObjectStore.managedObjectCache;
-    [operation setCompletionBlockWithSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *result) {
-        TRMember *member = [result firstObject];
-        self.localMember = member;
-    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+    [self.objectManager getObject:nil
+                             path:@"members/me"
+                       parameters:[self parametersWithParameters:nil]
+                          success:^(RKObjectRequestOperation *operation, RKMappingResult *result) {
+                              TRMember *member = [result firstObject];
+                              self.localMember = member;
+                              
+                              if (self.authorizationHandler) {
+                                  self.authorizationHandler(YES, nil);
+                              }
+                          }
+                          failure:^(RKObjectRequestOperation *operation, NSError *error) {
 #if DEBUG
-        NSLog(@"-getLocalMember failed with error: %@", [error localizedDescription]);
+                              NSLog(@"-getLocalMember failed with error: %@", [error localizedDescription]);
 #endif
-    }];
-    
-    [self.objectManager enqueueObjectRequestOperation:operation];
-    
+                              if (self.authorizationHandler) {
+                                  self.authorizationHandler(NO, error);
+                              }
+                          }];
 }
 
 #pragma mark - GTMOAuth
@@ -342,18 +348,18 @@ static TRManager *_sharedManager = nil;
     GTMOAuthAuthentication *auth = [[GTMOAuthAuthentication alloc] initWithSignatureMethod:kGTMOAuthSignatureMethodHMAC_SHA1
                                                                                consumerKey:API_DEVELOPER_KEY
                                                                                 privateKey:API_DEVELOPER_SECRET];
-    
+
     // setting the service name lets us inspect the auth object later to know
     // what service it is for
     auth.serviceProvider = TRAPIServiceName;
-    
+
     // GTMOAuthAuthentication.h and GTMOAuthAuthentication.m needed to be modified
     // to include the appName property which maps to an "AuthorizeToken extension" @"name".
     // Create custom accessors modeled after those for the domain property.
     // The GTM implementation does not include that parameter, which is required to show the app's name
     // when the OAuth view controller is displayed.
-    auth.appName = @"iOS Trello";
-    
+    auth.appName = OAUTH_APP_NAME;
+
     return auth;
 }
 

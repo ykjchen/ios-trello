@@ -31,7 +31,6 @@ extern NSString *const TRAPIServiceName;
 
 #pragma mark - The local member
 - (TRMember *)localMember;
-- (NSArray *)allMembers;
 
 #pragma mark - Authorization to access user's Trello data
 @property (strong, nonatomic) void (^authorizationHandler)(BOOL isAuthorized, NSError *error);
