@@ -12,12 +12,11 @@
  * all of the properties available in the API.
  */
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#import "TRManagedObject.h"
 
 @class TRBoard;
 
-@interface TRMember : NSManagedObject
+@interface TRMember : TRManagedObject
 
 @property (nonatomic, retain) NSString * bio;
 @property (nonatomic, retain) NSString * fullName;

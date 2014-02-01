@@ -18,8 +18,6 @@
 #import "TRNotifications.h"
 #import "TRConfigs.h"
 
-extern NSString *const TRAPIServiceName;
-
 @class TRMember;
 
 @interface TRManager : NSObject
@@ -29,13 +27,11 @@ extern NSString *const TRAPIServiceName;
  */
 + (TRManager *)sharedManager;
 
-#pragma mark - The local member
-- (TRMember *)localMember;
-
 #pragma mark - Authorization to access user's Trello data
 @property (strong, nonatomic) void (^authorizationHandler)(BOOL isAuthorized, NSError *error);
 - (UIViewController *)authorizationViewController;
 - (void)deauthorize;
 - (BOOL)isAuthorized;
+- (NSString *)authorizationToken;
 
 @end

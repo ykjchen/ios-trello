@@ -15,7 +15,10 @@
 #import <GTMOAuth/GTMOAuth.h>
 
 // model
+#import "TRManagedObject.h"
 #import "TRMember.h"
+#import "TRMemberMethods.h"
+
 #import "TRBoard.h"
 
 // helpers
@@ -23,7 +26,6 @@
 
 // constants
 NSString *const TRAPIServiceName = @"Trello";
-NSString *const TRUserDefaultLocalMemberUsername = @"LocalUser";
 
 @interface TRManager () {
     TRMember *_localMember;
@@ -164,6 +166,8 @@ static TRManager *_sharedManager = nil;
     
     [self mapObjects];
     
+    
+    
 #if !__has_feature(objc_arc)
     [managedObjectModel release];
     [managedObjectStore release];
@@ -188,148 +192,10 @@ static TRManager *_sharedManager = nil;
     }];
 }
 
-#pragma mark - Fetching From Store
+#pragma mark - API Requests
 
-- (NSArray *)fetchObjectsForKey:(NSString *)key
-                      predicate:(id)predicate
-                 sortDescriptor:(NSString *)sortDescriptor
-                  sortAscending:(BOOL)sortAscending
-                     fetchLimit:(NSUInteger)fetchLimit
-{
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:key];
-    
-    if (predicate != nil) {
-        if ([predicate isKindOfClass:[NSString class]]) {
-            NSPredicate *pred = [NSPredicate predicateWithFormat:predicate];
-            [request setPredicate:pred];
-        } else if ([predicate isKindOfClass:[NSPredicate class]]) {
-            [request setPredicate:predicate];
-        }
-    }
-    
-    if (sortDescriptor != nil) {
-        NSSortDescriptor *sd = [NSSortDescriptor
-                                sortDescriptorWithKey:sortDescriptor
-                                ascending:sortAscending];
-        [request setSortDescriptors:[NSArray arrayWithObject:sd]];
-    }
-    
-    [request setFetchLimit:fetchLimit];
-    
-    NSError *error;
-    NSManagedObjectContext *context = [self context];
-    NSArray *result = [context executeFetchRequest:request error:&error];
-    
-#if DEBUG
-    if (!result) {
-        [NSException raise:@"Fetch failed"
-                    format:@"Reason: %@", [error localizedDescription]];
-    }
-#endif
-    
-    return result;
-}
 
-#pragma mark - API Url Generation
-
-/*!
- * This adds authorization parameters onto the passed in parameters.
- */
-- (NSDictionary *)parametersWithParameters:(NSDictionary *)parameters
-{
-    NSMutableDictionary *authorizationParameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                                    API_DEVELOPER_KEY, @"key",
-                                                    self.authentication.token, @"token", nil];
-    if (parameters) {
-        [authorizationParameters addEntriesFromDictionary:parameters];
-    }
-    return [NSDictionary dictionaryWithDictionary:authorizationParameters];
-}
-
-- (NSURL *)urlWithPath:(NSString *)path parameters:(NSDictionary *)parameters
-{
-    NSMutableString *fullPath = [NSMutableString stringWithString:[API_BASE_URL stringByAppendingPathComponent:path]];
-    [fullPath appendFormat:@"?%@", [self authorizationParameters]];
-    
-    if (parameters) {
-        [fullPath appendFormat:@"&%@", [self stringFromParameters:parameters]];
-    }
-    
-    return [NSURL URLWithString:fullPath];
-}
-
-- (NSString *)authorizationParameters
-{
-    return [NSString stringWithFormat:@"key=%@&token=%@", API_DEVELOPER_KEY, self.authentication.token];
-}
-
-- (NSString *)stringFromParameters:(NSDictionary *)parameters
-{
-    NSArray *keys = [parameters allKeys];
-    NSMutableArray *formattedParameters = [NSMutableArray arrayWithCapacity:keys.count];
-    for (NSString *key in keys) {
-        [formattedParameters addObject:[NSString stringWithFormat:@"%@=%@", key, parameters[key]]];
-    }
-    return [formattedParameters componentsJoinedByString:@"&"];
-}
-
-#pragma mark - The Local Member
-
-- (void)setLocalMember:(TRMember *)localMember
-{
-    if (_localMember == localMember) {
-        return;
-    }
-    _localMember = localMember;
-}
-
-- (TRMember *)localMember
-{
-    if (!_localMember) {
-        NSString *username = [[NSUserDefaults standardUserDefaults] stringForKey:TRUserDefaultLocalMemberUsername];
-        if (!username) {
-            return nil;
-        }
-        
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"username = %@", username];
-        NSArray *hits = [self fetchObjectsForKey:@"TRMember"
-                                       predicate:predicate
-                                  sortDescriptor:nil
-                                   sortAscending:NO
-                                      fetchLimit:1];
-        if (hits.count == 0) {
-            return nil;
-        }
-        
-        _localMember = hits[0];
-    }
-    return _localMember;
-}
-
-- (void)getLocalMember
-{
-    [self.objectManager getObject:nil
-                             path:@"members/me"
-                       parameters:[self parametersWithParameters:nil]
-                          success:^(RKObjectRequestOperation *operation, RKMappingResult *result) {
-                              TRMember *member = [result firstObject];
-                              self.localMember = member;
-                              
-                              if (self.authorizationHandler) {
-                                  self.authorizationHandler(YES, nil);
-                              }
-                          }
-                          failure:^(RKObjectRequestOperation *operation, NSError *error) {
-#if DEBUG
-                              NSLog(@"-getLocalMember failed with error: %@", [error localizedDescription]);
-#endif
-                              if (self.authorizationHandler) {
-                                  self.authorizationHandler(NO, error);
-                              }
-                          }];
-}
-
-#pragma mark - GTMOAuth
+#pragma mark - Authorization with GTMOAuth
 #pragma mark Public
 - (BOOL)isAuthorized
 {
@@ -347,9 +213,13 @@ static TRManager *_sharedManager = nil;
 - (void)deauthorize
 {
     [GTMOAuthViewControllerTouch removeParamsFromKeychainForName:TRAPIServiceName];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:TRUserDefaultLocalMemberUsername];
     [self removeAuthentication];
-    [self setLocalMember:nil];
+    [TRMember clearLocalMember];
+}
+
+- (NSString *)authorizationToken
+{
+    return self.authentication.token;
 }
 
 #pragma mark Private
@@ -378,10 +248,9 @@ static TRManager *_sharedManager = nil;
 
 - (GTMOAuthViewControllerTouch *)authViewController
 {
-    NSURL *requestURL = [NSURL URLWithString:@"https://trello.com/1/OAuthGetRequestToken"];
-    NSURL *accessURL = [NSURL URLWithString:@"https://trello.com/1/OAuthGetAccessToken"];
-    NSURL *authorizeURL = [NSURL URLWithString:@"https://trello.com/1/OAuthAuthorizeToken"];
-    NSString *scope = @"read,write";
+    NSURL *requestURL = [NSURL URLWithString:OAUTH_REQUEST_URL];
+    NSURL *accessURL = [NSURL URLWithString:OAUTH_ACCESS_URL];
+    NSURL *authorizeURL = [NSURL URLWithString:OAUTH_AUTHORIZE_URL];
     
     GTMOAuthAuthentication *auth = [self defaultAuthentication];
     
@@ -393,7 +262,7 @@ static TRManager *_sharedManager = nil;
     [auth setCallback:@"http://127.0.0.1:6080/cb"];
     
     // Display the autentication view
-    GTMOAuthViewControllerTouch *viewController = [[GTMOAuthViewControllerTouch alloc] initWithScope:scope
+    GTMOAuthViewControllerTouch *viewController = [[GTMOAuthViewControllerTouch alloc] initWithScope:OAUTH_SCOPE
                                                                                             language:nil
                                                                                      requestTokenURL:requestURL
                                                                                    authorizeTokenURL:authorizeURL
@@ -425,7 +294,7 @@ static TRManager *_sharedManager = nil;
 #if DEBUG
         NSLog(@"Authorization succeeded.");
 #endif
-        [self getLocalMember];
+        [TRMember getLocalMember];
     }
 }
 
