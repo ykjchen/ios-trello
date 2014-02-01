@@ -14,6 +14,8 @@
 
 @interface iOS_TrelloTests : XCTestCase
 
+@property (strong, nonatomic) RKObjectManager *objectManager;
+
 @end
 
 @implementation iOS_TrelloTests
@@ -30,9 +32,14 @@
     [super tearDown];
 }
 
+- (RKObjectManager *)objectManager
+{
+    
+}
+
 - (void)testMapBuilder
 {
-    RKObjectManager *objectManager = [RKObjectManager al]
+    RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL: ]
     TRMapBuilder *mapBuilder = [[TRMapBuilder alloc] initWithFile:MAPPING_DEFINITIONS_FILENAME
                                                     objectManager:<#(RKObjectManager *)#>]
 }

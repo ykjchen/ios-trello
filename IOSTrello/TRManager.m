@@ -121,6 +121,10 @@ static TRManager *_sharedManager = nil;
                                                                          authentication:auth];
             if (inKeyChain) {
                 _authentication = auth;
+                
+#if !__has_feature(objc_arc)
+                [_authentication retain];
+#endif
             }
         }
     }
@@ -233,7 +237,7 @@ static TRManager *_sharedManager = nil;
                                                                                consumerKey:API_DEVELOPER_KEY
                                                                                 privateKey:API_DEVELOPER_SECRET];
 #if !__has_feature(objc_arc)
-    [auth release];
+    [auth autorelease];
 #endif
 
     // setting the service name lets us inspect the auth object later to know

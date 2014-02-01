@@ -550,6 +550,11 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/../Libraries/Headers",
+				);
 				INFOPLIST_FILE = "iOS TrelloTests/iOS TrelloTests-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -573,6 +578,11 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iOS Trello/iOS Trello-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/../Libraries/Headers",
+				);
 				INFOPLIST_FILE = "iOS TrelloTests/iOS TrelloTests-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
