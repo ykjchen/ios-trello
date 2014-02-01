@@ -1,23 +1,23 @@
 //
-//  TRMember.m
+//  TRList.m
 //  iOS Trello
 //
 //  Created by Joseph Chen on 2/1/14.
 //  Copyright (c) 2014 Joseph Chen. All rights reserved.
 //
 
-#import "TRMember.h"
+#import "TRList.h"
 #import "TRBoard.h"
+#import "TRCard.h"
 
 
-@implementation TRMember
+@implementation TRList
 
-@dynamic bio;
-@dynamic fullName;
+@dynamic closed;
+@dynamic name;
+@dynamic pos;
 @dynamic identifier;
-@dynamic initials;
-@dynamic url;
-@dynamic username;
-@dynamic boards;
+@dynamic board;
+@dynamic cards;
 
 @end

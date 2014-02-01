@@ -2,7 +2,7 @@
 //  TRBoard.m
 //  iOS Trello
 //
-//  Created by Joseph Chen on 1/27/14.
+//  Created by Joseph Chen on 2/1/14.
 //  Copyright (c) 2014 Joseph Chen. All rights reserved.
 //
 
@@ -12,12 +12,13 @@
 
 @implementation TRBoard
 
-@dynamic name;
-@dynamic desc;
 @dynamic closed;
+@dynamic desc;
+@dynamic identifier;
+@dynamic name;
 @dynamic pinned;
 @dynamic url;
-@dynamic identifier;
 @dynamic members;
+@dynamic lists;
 
 @end

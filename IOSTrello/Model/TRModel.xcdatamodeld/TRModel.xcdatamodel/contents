@@ -10,7 +10,7 @@
         <relationship name="lists" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TRList" inverseName="board" inverseEntity="TRList" syncable="YES"/>
         <relationship name="members" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TRMember" inverseName="boards" inverseEntity="TRMember" syncable="YES"/>
     </entity>
-    <entity name="TRCard" syncable="YES">
+    <entity name="TRCard" representedClassName="TRCard" syncable="YES">
         <attribute name="closed" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="comments" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="desc" optional="YES" attributeType="String" syncable="YES"/>
@@ -21,7 +21,7 @@
         <attribute name="pos" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <relationship name="list" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TRList" inverseName="cards" inverseEntity="TRList" syncable="YES"/>
     </entity>
-    <entity name="TRList" syncable="YES">
+    <entity name="TRList" representedClassName="TRList" syncable="YES">
         <attribute name="closed" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="identifier" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>

@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		7C4F0469189C0E7500B3769D /* Mappings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7C4F0459189C0E7500B3769D /* Mappings.plist */; };
-		7C4F046A189C0E7500B3769D /* TRBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C4F045B189C0E7500B3769D /* TRBoard.m */; };
-		7C4F046B189C0E7500B3769D /* TRMember.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C4F045D189C0E7500B3769D /* TRMember.m */; };
 		7C4F046C189C0E7500B3769D /* TRModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7C4F045E189C0E7500B3769D /* TRModel.xcdatamodeld */; };
 		7C4F046D189C0E7500B3769D /* TRNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C4F0463189C0E7500B3769D /* TRNotifications.m */; };
 		7C4F046E189C0E7500B3769D /* TRManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C4F0466189C0E7500B3769D /* TRManager.m */; };
@@ -26,6 +24,10 @@
 		7C4F047D189CE02500B3769D /* libOAuthTouch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CF0A6E5189501B900BF4CD2 /* libOAuthTouch.a */; };
 		7C4F0480189D024300B3769D /* TRHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C4F047F189D024300B3769D /* TRHelpers.m */; };
 		7C4F0482189D195E00B3769D /* Parameters.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7C4F0481189D195E00B3769D /* Parameters.plist */; };
+		7C4F0485189D476300B3769D /* TRMember.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C4F0484189D476300B3769D /* TRMember.m */; };
+		7C4F0488189D476400B3769D /* TRBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C4F0487189D476400B3769D /* TRBoard.m */; };
+		7C4F048B189D476400B3769D /* TRCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C4F048A189D476400B3769D /* TRCard.m */; };
+		7C4F048E189D476400B3769D /* TRList.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C4F048D189D476400B3769D /* TRList.m */; };
 		7CD67FD91894EE01003F32C0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD67FD81894EE01003F32C0 /* Foundation.framework */; };
 		7CD67FDB1894EE01003F32C0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD67FDA1894EE01003F32C0 /* CoreGraphics.framework */; };
 		7CD67FDD1894EE01003F32C0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD67FDC1894EE01003F32C0 /* UIKit.framework */; };
@@ -61,10 +63,6 @@
 
 /* Begin PBXFileReference section */
 		7C4F0459189C0E7500B3769D /* Mappings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Mappings.plist; sourceTree = "<group>"; };
-		7C4F045A189C0E7500B3769D /* TRBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRBoard.h; sourceTree = "<group>"; };
-		7C4F045B189C0E7500B3769D /* TRBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRBoard.m; sourceTree = "<group>"; };
-		7C4F045C189C0E7500B3769D /* TRMember.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRMember.h; sourceTree = "<group>"; };
-		7C4F045D189C0E7500B3769D /* TRMember.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRMember.m; sourceTree = "<group>"; };
 		7C4F045F189C0E7500B3769D /* TRModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TRModel.xcdatamodel; sourceTree = "<group>"; };
 		7C4F0461189C0E7500B3769D /* TRConfigs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRConfigs.h; sourceTree = "<group>"; };
 		7C4F0462189C0E7500B3769D /* TRNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRNotifications.h; sourceTree = "<group>"; };
@@ -81,6 +79,14 @@
 		7C4F047E189D024300B3769D /* TRHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRHelpers.h; sourceTree = "<group>"; };
 		7C4F047F189D024300B3769D /* TRHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRHelpers.m; sourceTree = "<group>"; };
 		7C4F0481189D195E00B3769D /* Parameters.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Parameters.plist; sourceTree = "<group>"; };
+		7C4F0483189D476300B3769D /* TRMember.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRMember.h; sourceTree = "<group>"; };
+		7C4F0484189D476300B3769D /* TRMember.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRMember.m; sourceTree = "<group>"; };
+		7C4F0486189D476400B3769D /* TRBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRBoard.h; sourceTree = "<group>"; };
+		7C4F0487189D476400B3769D /* TRBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRBoard.m; sourceTree = "<group>"; };
+		7C4F0489189D476400B3769D /* TRCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRCard.h; sourceTree = "<group>"; };
+		7C4F048A189D476400B3769D /* TRCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRCard.m; sourceTree = "<group>"; };
+		7C4F048C189D476400B3769D /* TRList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRList.h; sourceTree = "<group>"; };
+		7C4F048D189D476400B3769D /* TRList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRList.m; sourceTree = "<group>"; };
 		7CD67FD51894EE01003F32C0 /* iOS Trello.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS Trello.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CD67FD81894EE01003F32C0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		7CD67FDA1894EE01003F32C0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -169,10 +175,14 @@
 				7C4F0481189D195E00B3769D /* Parameters.plist */,
 				7C4F0473189CBBD800B3769D /* TRManagedObject.h */,
 				7C4F0474189CBBD800B3769D /* TRManagedObject.m */,
-				7C4F045A189C0E7500B3769D /* TRBoard.h */,
-				7C4F045B189C0E7500B3769D /* TRBoard.m */,
-				7C4F045C189C0E7500B3769D /* TRMember.h */,
-				7C4F045D189C0E7500B3769D /* TRMember.m */,
+				7C4F0483189D476300B3769D /* TRMember.h */,
+				7C4F0484189D476300B3769D /* TRMember.m */,
+				7C4F0486189D476400B3769D /* TRBoard.h */,
+				7C4F0487189D476400B3769D /* TRBoard.m */,
+				7C4F048C189D476400B3769D /* TRList.h */,
+				7C4F048D189D476400B3769D /* TRList.m */,
+				7C4F0489189D476400B3769D /* TRCard.h */,
+				7C4F048A189D476400B3769D /* TRCard.m */,
 				7C4F0470189CB83500B3769D /* TRMemberMethods.h */,
 				7C4F0471189CB83500B3769D /* TRMemberMethods.m */,
 				7C4F045E189C0E7500B3769D /* TRModel.xcdatamodeld */,
@@ -373,17 +383,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C4F046B189C0E7500B3769D /* TRMember.m in Sources */,
 				7C4F046C189C0E7500B3769D /* TRModel.xcdatamodeld in Sources */,
 				7CD67FE91894EE01003F32C0 /* TRAppDelegate.m in Sources */,
+				7C4F048B189D476400B3769D /* TRCard.m in Sources */,
 				7CF0A6E91895031B00BF4CD2 /* TRLaunchViewController.m in Sources */,
 				7C4F0475189CBBD800B3769D /* TRManagedObject.m in Sources */,
-				7C4F046A189C0E7500B3769D /* TRBoard.m in Sources */,
 				7CD67FE51894EE01003F32C0 /* main.m in Sources */,
 				7C4F046F189C0E7500B3769D /* TRMapBuilder.m in Sources */,
+				7C4F0485189D476300B3769D /* TRMember.m in Sources */,
 				7C4F046D189C0E7500B3769D /* TRNotifications.m in Sources */,
 				7C4F0472189CB83500B3769D /* TRMemberMethods.m in Sources */,
 				7C4F046E189C0E7500B3769D /* TRManager.m in Sources */,
+				7C4F048E189D476400B3769D /* TRList.m in Sources */,
+				7C4F0488189D476400B3769D /* TRBoard.m in Sources */,
 				7C4F0480189D024300B3769D /* TRHelpers.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

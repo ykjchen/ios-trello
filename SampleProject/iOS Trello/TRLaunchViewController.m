@@ -65,7 +65,9 @@
     [super viewDidLoad];
     
     self.navigationItem.title = @"TRLaunchViewController";
-    self.authorizationButton.layer.cornerRadius = self.authorizationButton.bounds.size.height * 0.25f;
+    for (UIButton *button in @[self.authorizationButton, self.localMemberButton]) {
+        button.layer.cornerRadius = self.authorizationButton.bounds.size.height * 0.25f;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
