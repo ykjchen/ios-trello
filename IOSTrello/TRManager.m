@@ -294,7 +294,15 @@ static TRManager *_sharedManager = nil;
 #if DEBUG
         NSLog(@"Authorization succeeded.");
 #endif
-        [TRMember getLocalMember];
+        [TRMember getLocalMemberWithSuccess:^(TRMember *member) {
+            if (self.authorizationHandler) {
+                self.authorizationHandler(YES, nil);
+            }
+        } failure:^(NSError *error) {
+            if (self.authorizationHandler) {
+                self.authorizationHandler(NO, error);
+            }
+        }];
     }
 }
 

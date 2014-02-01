@@ -6,11 +6,13 @@
 //  Copyright (c) 2014 Joseph Chen. All rights reserved.
 //
 
-#import "TRMember.h"
-
-/*
- * Notifications
+/*!
+ * These methods are included here as categories
+ * so that they are not overwritten when the model
+ * is updated.
  */
+
+#import "TRMember.h"
 
 @interface TRMember (CustomMethods)
 

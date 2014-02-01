@@ -11,8 +11,10 @@
 // frameworks
 #import <QuartzCore/QuartzCore.h>
 
+// model
 #import "TRManager.h"
 #import "TRMember.h"
+#import "TRMemberMethods.h"
 #import "TRBoard.h"
 
 @interface TRLaunchViewController ()
@@ -38,7 +40,7 @@
         [[TRManager sharedManager] setAuthorizationHandler:^(BOOL isAuthorized, NSError *error) {
             if (isAuthorized)
             {
-                NSLog(@"Authorized user: %@", [[TRManager sharedManager] localMember]);
+                NSLog(@"Authorized user: %@", [TRMember localMember]);
             }
             else
             {
