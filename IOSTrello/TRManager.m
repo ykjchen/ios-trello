@@ -163,12 +163,22 @@ static TRManager *_sharedManager = nil;
     self.objectManager.managedObjectStore = managedObjectStore;
     
     [self mapObjects];
+    
+#if !__has_feature(objc_arc)
+    [managedObjectModel release];
+    [managedObjectStore release];
+#endif
 }
 
 - (void)mapObjects
 {
     TRMapBuilder *mapBuilder = [[TRMapBuilder alloc] initWithFile:MAPPING_DEFINITIONS_FILENAME
                                                     objectManager:self.objectManager];
+    
+#if !__has_feature(objc_arc)
+    [mapBuilder autorelease];
+#endif
+    
     [mapBuilder setBuildHandler:^(BOOL success, NSError *error) {
 #if DEBUG
         if (!success) {
@@ -348,6 +358,9 @@ static TRManager *_sharedManager = nil;
     GTMOAuthAuthentication *auth = [[GTMOAuthAuthentication alloc] initWithSignatureMethod:kGTMOAuthSignatureMethodHMAC_SHA1
                                                                                consumerKey:API_DEVELOPER_KEY
                                                                                 privateKey:API_DEVELOPER_SECRET];
+#if !__has_feature(objc_arc)
+    [auth release];
+#endif
 
     // setting the service name lets us inspect the auth object later to know
     // what service it is for
@@ -389,6 +402,10 @@ static TRManager *_sharedManager = nil;
                                                                                       appServiceName:TRAPIServiceName
                                                                                             delegate:self
                                                                                     finishedSelector:@selector(viewController:finishedWithAuth:error:)];
+#if !__has_feature(objc_arc)
+    [viewController autorelease];
+#endif
+
     return viewController;
 }
 

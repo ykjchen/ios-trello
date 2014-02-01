@@ -18,6 +18,11 @@
     TRLaunchViewController *vc = [[TRLaunchViewController alloc] init];
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
     self.window.rootViewController = nav;
+
+#if !__has_feature(objc_arc)
+    [vc release];
+    [nav release];
+#endif
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];

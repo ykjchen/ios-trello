@@ -22,6 +22,20 @@
 
 @implementation TRMapBuilder
 
+#if !__has_feature(objc_arc)
+- (void)dealloc
+{
+    [super dealloc];
+
+    [_buildHandler release];
+    [_objectManager release];
+    [_mappingDefinitionsFilename release];
+    [_mappingDefinitions release];
+}
+#endif
+
+#pragma mark - Public
+
 - (id)initWithFile:(NSString *)mappingDefinitionsFilename
      objectManager:(RKObjectManager *)objectManager
 {
@@ -48,6 +62,8 @@
         }
     }
 }
+
+#pragma mark - Private
 
 - (NSArray *)mappingDefinitions
 {
@@ -130,6 +146,10 @@
         RKConnectionDescription *connection = [[RKConnectionDescription alloc] initWithRelationship:relationshipDescription
                                                                                          attributes:attributes];
         [mapping addConnection:connection];
+        
+#if !__has_feature(objc_arc)
+        [connection release];
+#endif
     }
 }
 
