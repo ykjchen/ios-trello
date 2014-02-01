@@ -18,7 +18,6 @@
 @dynamic url;
 @dynamic username;
 @dynamic identifier;
-@dynamic idBoards;
 @dynamic boards;
 
 @end

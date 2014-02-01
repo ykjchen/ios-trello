@@ -19,6 +19,10 @@
 		<string>all</string>
 		<key>member_fields</key>
 		<string>fullName,bio,initials,username,id,url</string>
+		<key>lists</key>
+		<string>all</string>
+		<key>list_fields</key>
+		<string></string>
 	</dict>
 </dict>
 </plist>

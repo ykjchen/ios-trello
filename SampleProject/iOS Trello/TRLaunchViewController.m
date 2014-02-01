@@ -99,6 +99,11 @@
 {
     [TRMember getLocalMemberWithSuccess:^(TRMember *member) {
         NSLog(@"GET local member:%@ boards:%i", member, member.boards.count);
+        if (member.boards.count) {
+            for (TRBoard *board in member.boards) {
+                NSLog(@"    board: %@", board);
+            }
+        }
     } failure:^(NSError *error) {
         NSLog(@"Failed to GET local member: %@", error.localizedDescription);
     }];

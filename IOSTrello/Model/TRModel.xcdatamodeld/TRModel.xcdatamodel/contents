@@ -7,13 +7,25 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="pinned" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="lists" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TRList" inverseName="board" inverseEntity="TRList" syncable="YES"/>
         <relationship name="members" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TRMember" inverseName="boards" inverseEntity="TRMember" syncable="YES"/>
     </entity>
-    <entity name="TRCard" syncable="YES"/>
+    <entity name="TRCard" syncable="YES">
+        <attribute name="closed" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="identifier" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="list" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TRList" inverseName="cards" inverseEntity="TRList" syncable="YES"/>
+    </entity>
+    <entity name="TRList" syncable="YES">
+        <attribute name="closed" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="identifier" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="pos" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <relationship name="board" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TRBoard" inverseName="lists" inverseEntity="TRBoard" syncable="YES"/>
+        <relationship name="cards" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TRCard" inverseName="list" inverseEntity="TRCard" syncable="YES"/>
+    </entity>
     <entity name="TRMember" representedClassName="TRMember" syncable="YES">
         <attribute name="bio" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fullName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="idBoards" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="identifier" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="initials" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
@@ -21,8 +33,9 @@
         <relationship name="boards" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TRBoard" inverseName="members" inverseEntity="TRBoard" syncable="YES"/>
     </entity>
     <elements>
-        <element name="TRMember" positionX="0" positionY="0" width="0" height="0"/>
         <element name="TRBoard" positionX="0" positionY="0" width="0" height="0"/>
         <element name="TRCard" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="TRMember" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="TRList" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

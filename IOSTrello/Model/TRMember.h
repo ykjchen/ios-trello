@@ -24,7 +24,6 @@
 @property (nonatomic, retain) NSString * url;
 @property (nonatomic, retain) NSString * username;
 @property (nonatomic, retain) NSString * identifier;
-@property (nonatomic, retain) NSArray * idBoards;
 @property (nonatomic, retain) NSSet *boards;
 @end
 

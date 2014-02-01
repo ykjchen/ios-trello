@@ -19,8 +19,6 @@
 			<string>username</string>
 			<key>id</key>
 			<string>identifier</string>
-			<key>idBoards</key>
-			<string>idBoards</string>
 		</dict>
 		<key>relationships</key>
 		<array>
