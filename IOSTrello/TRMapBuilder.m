@@ -87,7 +87,6 @@
 {
     [self buildErrorMapping];
     
-    NSLog(@"mappingDefinitions: %@", self.mappingDefinitions);
     for (NSDictionary *entityMappingDefinitions in self.mappingDefinitions) {
         NSString *entityName = entityMappingDefinitions[@"entity"];
         NSDictionary *attributes = entityMappingDefinitions[@"attributes"];

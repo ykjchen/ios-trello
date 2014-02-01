@@ -8,6 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TRLaunchViewController">
             <connections>
                 <outlet property="authorizationButton" destination="Ljq-mr-f8C" id="Mqv-ZE-7Kn"/>
+                <outlet property="localMemberButton" destination="vTb-RJ-xtE" id="LVP-Ps-Cim"/>
                 <outlet property="view" destination="1" id="zXW-Dv-ZZb"/>
             </connections>
         </placeholder>
@@ -17,15 +18,27 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Ljq-mr-f8C">
-                    <rect key="frame" x="92" y="269" width="136" height="30"/>
+                    <rect key="frame" x="77" y="139" width="167" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.85882359743118286" green="0.85882359743118286" blue="0.85882359743118286" alpha="1" colorSpace="deviceRGB"/>
-                    <state key="normal" title="Button">
+                    <state key="normal" title="Authorize">
                         <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
                         <action selector="tapped:" destination="-1" eventType="touchUpInside" id="KuH-Db-XNy"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="vTb-RJ-xtE">
+                    <rect key="frame" x="77" y="218" width="167" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="0.85882359740000003" green="0.85882359740000003" blue="0.85882359740000003" alpha="1" colorSpace="deviceRGB"/>
+                    <state key="normal" title="GET Local Member">
+                        <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="tapped:" destination="-1" eventType="touchUpInside" id="GKt-aH-n07"/>
                     </connections>
                 </button>
             </subviews>

@@ -15,6 +15,7 @@
 @interface TRLaunchViewController : UIViewController
 
 @property (strong, nonatomic) IBOutlet UIButton *authorizationButton;
+@property (strong, nonatomic) IBOutlet UIButton *localMemberButton;
 
 - (IBAction)tapped:(id)sender;
 

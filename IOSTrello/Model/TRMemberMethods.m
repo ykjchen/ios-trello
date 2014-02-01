@@ -86,6 +86,8 @@ static TRMember *_localMember = nil;
 + (void)getLocalMemberWithSuccess:(void (^)(TRMember *))success
                           failure:(void (^)(NSError *))failure
 {
+    NSAssert([self objectManager], @"Class' objectManager not set.");
+    
     [[self objectManager] getObject:nil
                              path:@"members/me"
                        parameters:[self parametersWithParameters:nil]
@@ -95,12 +97,15 @@ static TRMember *_localMember = nil;
                               success(member);
                           }
                           failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                              TRLog(@"-getLocalMember failure: %@", error.localizedDescription);
                               failure(error);
                           }];
 }
 
 + (void)getMemberWithId:(NSString *)identifier success:(void (^)(TRMember *))success failure:(void (^)(NSError *))failure
 {
+    NSAssert([self objectManager], @"Class' objectManager not set.");
+
     NSString *path = [NSString stringWithFormat:@"members/%@", identifier];
     [[self objectManager] getObject:nil
                                path:path

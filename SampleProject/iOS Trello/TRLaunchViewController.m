@@ -90,7 +90,18 @@
 {
     if (sender == self.authorizationButton) {
         [self tappedAuthorizationButton];
+    } else if (sender == self.localMemberButton) {
+        [self tappedLocalMemberButton];
     }
+}
+
+- (void)tappedLocalMemberButton
+{
+    [TRMember getLocalMemberWithSuccess:^(TRMember *member) {
+        NSLog(@"GET local member: %@", member);
+    } failure:^(NSError *error) {
+        NSLog(@"Failed to GET local member: %@", error.localizedDescription);
+    }];
 }
 
 #pragma mark - OAuth

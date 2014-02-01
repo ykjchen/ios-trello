@@ -14,6 +14,9 @@
  */
 
 #import <Foundation/Foundation.h>
+
+// helpers, configs, constants
+#import "TRHelpers.h"
 #import "TRSensitiveConfigs.h"
 #import "TRNotifications.h"
 #import "TRConfigs.h"

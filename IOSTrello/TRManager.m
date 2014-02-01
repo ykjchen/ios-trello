@@ -106,6 +106,8 @@ static TRManager *_sharedManager = nil;
 #if !__has_feature(objc_arc)
         [_objectManager retain];
 #endif
+        
+        [TRManagedObject setObjectManager:_objectManager];
     }
     return _objectManager;
 }
@@ -183,11 +185,9 @@ static TRManager *_sharedManager = nil;
                                                     objectManager:self.objectManager];
     
     [mapBuilder setBuildHandler:^(BOOL success, NSError *error) {
-#if DEBUG
         if (!success) {
-            NSLog(@"Could not build mappings: %@", error.localizedDescription);
+            TRLog(@"Could not build mappings: %@", error.localizedDescription);
         }
-#endif
     }];
     
 #if !__has_feature(objc_arc)
@@ -224,13 +224,9 @@ static TRManager *_sharedManager = nil;
                                 path:path
                           parameters:[TRManagedObject parametersWithParameters:nil]
                              success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-#if DEBUG
-                                 NSLog(@"Successfully deleted oauth token.");
-#endif
+                                 TRLog(@"Successfully deleted oauth token.");
                              } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-#if DEBUG
-                                 NSLog(@"Failed to delete oauth token");
-#endif
+                                 TRLog(@"Failed to delete oauth token");
                              }];
      */
     
@@ -305,17 +301,13 @@ static TRManager *_sharedManager = nil;
       finishedWithAuth:(GTMOAuthAuthentication *)auth
                  error:(NSError *)error {
     if (error != nil) {
-#if DEBUG
-        NSLog(@"Authorization failed: %@", error.localizedDescription);
-#endif
+        TRLog(@"Authorization failed: %@", error.localizedDescription);
         
         if (self.authorizationHandler) {
             self.authorizationHandler(NO, error);
         }
     } else {
-#if DEBUG
-        NSLog(@"Authorization succeeded.");
-#endif
+        TRLog(@"Authorization succeeded.");
         
         [TRMember getLocalMemberWithSuccess:^(TRMember *member) {
             if (self.authorizationHandler) {

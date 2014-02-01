@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import "TRHelpers.h"
 
 @class RKObjectManager;
 @interface TRManagedObject : NSManagedObject
