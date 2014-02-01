@@ -18,3 +18,6 @@ UIKit.framework
 Foundation.framework
 libRestKit.a
 libOAuthTouch.a // this was modified to conform to the Trello API
+
+Header Search Paths:
+$(SRCROOT)/../Libraries/Headers

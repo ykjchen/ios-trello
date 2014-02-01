@@ -17,6 +17,13 @@
 		7C4F0472189CB83500B3769D /* TRMemberMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C4F0471189CB83500B3769D /* TRMemberMethods.m */; };
 		7C4F0475189CBBD800B3769D /* TRManagedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C4F0474189CBBD800B3769D /* TRManagedObject.m */; };
 		7C4F0476189CD92800B3769D /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CF0A6E11894FC9D00BF4CD2 /* libRestKit.a */; };
+		7C4F0477189CDFE600B3769D /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD6801A1894F8F9003F32C0 /* MobileCoreServices.framework */; };
+		7C4F0478189CDFED00B3769D /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD680181894F8F3003F32C0 /* CoreData.framework */; };
+		7C4F0479189CDFF400B3769D /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD680161894F8EE003F32C0 /* CFNetwork.framework */; };
+		7C4F047A189CDFFC00B3769D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD680141894F7D3003F32C0 /* SystemConfiguration.framework */; };
+		7C4F047B189CE00200B3769D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD680121894F7CD003F32C0 /* Security.framework */; };
+		7C4F047C189CE00800B3769D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD67FDA1894EE01003F32C0 /* CoreGraphics.framework */; };
+		7C4F047D189CE02500B3769D /* libOAuthTouch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CF0A6E5189501B900BF4CD2 /* libOAuthTouch.a */; };
 		7CD67FD91894EE01003F32C0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD67FD81894EE01003F32C0 /* Foundation.framework */; };
 		7CD67FDB1894EE01003F32C0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD67FDA1894EE01003F32C0 /* CoreGraphics.framework */; };
 		7CD67FDD1894EE01003F32C0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD67FDC1894EE01003F32C0 /* UIKit.framework */; };
@@ -119,10 +126,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C4F047D189CE02500B3769D /* libOAuthTouch.a in Frameworks */,
+				7CD67FF31894EE01003F32C0 /* Foundation.framework in Frameworks */,
+				7CD67FF41894EE01003F32C0 /* UIKit.framework in Frameworks */,
+				7C4F047C189CE00800B3769D /* CoreGraphics.framework in Frameworks */,
+				7C4F047B189CE00200B3769D /* Security.framework in Frameworks */,
+				7C4F047A189CDFFC00B3769D /* SystemConfiguration.framework in Frameworks */,
+				7C4F0479189CDFF400B3769D /* CFNetwork.framework in Frameworks */,
+				7C4F0478189CDFED00B3769D /* CoreData.framework in Frameworks */,
+				7C4F0477189CDFE600B3769D /* MobileCoreServices.framework in Frameworks */,
 				7C4F0476189CD92800B3769D /* libRestKit.a in Frameworks */,
 				7CD67FF21894EE01003F32C0 /* XCTest.framework in Frameworks */,
-				7CD67FF41894EE01003F32C0 /* UIKit.framework in Frameworks */,
-				7CD67FF31894EE01003F32C0 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

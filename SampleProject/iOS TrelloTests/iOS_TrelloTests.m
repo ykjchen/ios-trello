@@ -11,10 +11,15 @@
 #import <RestKit/RestKit.h>
 #import "TRConfigs.h"
 #import "TRMapBuilder.h"
+#import "TRManager.h"
 
 @interface iOS_TrelloTests : XCTestCase
 
-@property (strong, nonatomic) RKObjectManager *objectManager;
+@end
+
+@interface TRManager (Test)
+
+- (RKObjectManager *)objectManager;
 
 @end
 
@@ -32,16 +37,27 @@
     [super tearDown];
 }
 
-- (RKObjectManager *)objectManager
+- (NSArray *)mappingsDefinitions
 {
-    
+    NSString *path = [[NSBundle mainBundle] pathForResource:[MAPPING_DEFINITIONS_FILENAME stringByDeletingPathExtension] ofType:[MAPPING_DEFINITIONS_FILENAME pathExtension]];
+    NSArray *definitions = [NSArray arrayWithContentsOfFile:path];
+    return definitions;
 }
 
 - (void)testMapBuilder
 {
-    RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL: ]
-    TRMapBuilder *mapBuilder = [[TRMapBuilder alloc] initWithFile:MAPPING_DEFINITIONS_FILENAME
-                                                    objectManager:<#(RKObjectManager *)#>]
+    // Test response descriptors
+    NSInteger expectedResponseDescriptors = 1; // Don't forget to count the error descriptor.
+
+    NSArray *mappingDefinitions = [self mappingsDefinitions];
+    for (NSDictionary *definition in mappingDefinitions) {
+        NSArray *responseDescriptors = definition[@"responseDescriptors"];
+        expectedResponseDescriptors += responseDescriptors.count;
+    }
+    
+    NSArray *responseDescriptors = [[[TRManager sharedManager] objectManager] responseDescriptors];
+    NSInteger foundResponseDescriptors = [responseDescriptors count];
+    XCTAssertEqual(expectedResponseDescriptors, foundResponseDescriptors, @"Response descriptors expected:%i found:%i", expectedResponseDescriptors, foundResponseDescriptors);
 }
 
 @end

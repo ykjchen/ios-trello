@@ -31,6 +31,14 @@
 }
 #endif
 
+// For legacy support
+- (void)viewDidUnload
+{
+    self.authorizationButton = nil;
+    
+    [super viewDidUnload];
+}
+
 // Default initializer
 - (id)init
 {

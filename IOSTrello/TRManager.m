@@ -27,9 +27,7 @@
 // constants
 NSString *const TRAPIServiceName = @"Trello";
 
-@interface TRManager () {
-    TRMember *_localMember;
-}
+@interface TRManager ()
 
 @property (strong, nonatomic) RKObjectManager *objectManager;
 @property (strong, nonatomic) GTMOAuthAuthentication *authentication;
@@ -133,6 +131,9 @@ static TRManager *_sharedManager = nil;
 
 - (void)removeAuthentication
 {
+#if !__has_feature(objc_arc)
+    [_authentication release];
+#endif
     _authentication = nil;
 }
 
@@ -159,7 +160,7 @@ static TRManager *_sharedManager = nil;
         [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];
     }
 #endif
-    
+
     NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:path fromSeedDatabaseAtPath:nil withConfiguration:nil options:nil error:&error];
     if (! persistentStore) {
         RKLogError(@"Failed adding persistent store at path '%@': %@", path, error);
@@ -169,8 +170,6 @@ static TRManager *_sharedManager = nil;
     self.objectManager.managedObjectStore = managedObjectStore;
     
     [self mapObjects];
-    
-    
     
 #if !__has_feature(objc_arc)
     [managedObjectModel release];
@@ -183,10 +182,6 @@ static TRManager *_sharedManager = nil;
     TRMapBuilder *mapBuilder = [[TRMapBuilder alloc] initWithFile:MAPPING_DEFINITIONS_FILENAME
                                                     objectManager:self.objectManager];
     
-#if !__has_feature(objc_arc)
-    [mapBuilder autorelease];
-#endif
-    
     [mapBuilder setBuildHandler:^(BOOL success, NSError *error) {
 #if DEBUG
         if (!success) {
@@ -194,6 +189,10 @@ static TRManager *_sharedManager = nil;
         }
 #endif
     }];
+    
+#if !__has_feature(objc_arc)
+    [mapBuilder release];
+#endif
 }
 
 #pragma mark - API Requests
