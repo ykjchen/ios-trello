@@ -91,6 +91,18 @@ Restkit maps API responses to `NSManagedObject`s. Classes in this wrapper repres
 
 Therefore, objects are accessible only after a parent of that object has been requested. Once the local user is authorized and the local user's `member` object is requested, his `boards` will be accessible. Attributes of each board is requested, but relationships such as a `board`'s `lists` must be requested independently:
 
+To GET details of the local user:
+
+```objective-c
+[TRMember getLocalMemberWithSuccess:^(TRMember *member) {
+    NSLog(@"GETted local member: %@", member);
+} failure:^(NSError *error) {
+    NSLog(@"Failed to GET local member: %@", error.localizedDescription);
+}];
+```
+
+To GET details of the local user's `boards`, `lists`, and `cards`:
+
 ```objective-c
 // This gets the |member| object corresponding to the local user
 TRMember *localMember = [TRMember localMember];
@@ -120,4 +132,21 @@ for (TRBoard *board in boards) {
                      failure:nil]; // Failure is not an option! ;)
 }
 ```
-    
+
+To save the NSManagedObjectContext (persist objects mapped by RestKit):
+
+```objective-c
+[[TRManager sharedManager] save];
+```
+
+### Extending
+
+Support for other objects, attributes, and relationship can be easily added by modifying:
+1. Core Data model: 
+[`TRModel.xcdatamodeld`](https://github.com/ykjchen/ios-trello/tree/master/IOSTrello/Model/TRModel.xcdatamodeld)
+2. RestKit mapping definitions: [`Mappings.plist`](https://github.com/ykjchen/ios-trello/blob/master/IOSTrello/Model/Mappings.plist)
+3. RestKit request parameters: 
+[`Parameters.plist`](https://github.com/ykjchen/ios-trello/blob/master/IOSTrello/Model/Parameters.plist)
+4. RestKit routing parameters:
+[`Routes.plist`](https://github.com/ykjchen/ios-trello/blob/master/IOSTrello/Model/Routes.plist)
+
