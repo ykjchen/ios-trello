@@ -148,13 +148,10 @@
 - (void)showAuthorizationViewController
 {
     UIViewController *viewController = [[TRManager sharedManager] authorizationViewControllerWithCompletionHandler:^(BOOL isAuthorized, NSError *error) {
-        if (isAuthorized)
-        {
+        if (isAuthorized) {
             NSLog(@"Authorized user: %@", [TRMember localMember]);
             [self updateUI];
-        }
-        else
-        {
+        } else {
             NSLog(@"Failed to authorize user: %@", error.localizedDescription);
             [self hideAuthorizationViewController];
         }
