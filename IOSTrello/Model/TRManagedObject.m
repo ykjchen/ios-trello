@@ -116,8 +116,8 @@ static RKObjectManager *_objectManager = nil;
     
 }
 
-- (void)refreshWithSuccess:(void (^)(TRManagedObject *))success
-                   failure:(void (^)(NSError *))failure
+- (void)requestDetailsWithSuccess:(void (^)(TRManagedObject *object))success
+                          failure:(void (^)(NSError *error))failure
 {
     [[self.class objectManager] getObject:self
                                      path:nil
