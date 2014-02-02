@@ -62,51 +62,60 @@ iOS 5+ is supported. ARC and non-ARC are/will be supported.
 Deauthorize the device from accessing the current user's account.
 (Note that this currently does not remove the application permission token from Trello)
 
-    - (void)deauthorize;
+```objective-c
+- (void)deauthorize;
+```
 
 Check if the device has access to a user's Trello account.
     
-    - (BOOL)isAuthorized;
+```objective-c
+- (BOOL)isAuthorized;
+```
 
 This returns the token required for API requests for private objects.
     
-    - (NSString *)authorizationToken;
+```objective-c
+- (NSString *)authorizationToken;
+```
 
 ### Requesting Objects
 
 Restkit maps API responses to `NSManagedObject`s. Classes in this wrapper representing Trello objects are subclasses of the abstract superclass `TRManagedObject`, which inherits from `NSManagedObject`. `TRManagedObject` currently has only one public instance method, which retrieves an object and attributes of its children:
 
-    - (void)requestDetailsWithSuccess:(void (^)(TRManagedObject *object))success
-                              failure:(void (^)(NSError *error))failure;
+```objective-c
+- (void)requestDetailsWithSuccess:(void (^)(TRManagedObject *object))success
+                          failure:(void (^)(NSError *error))failure;
+```
 
 Therefore, objects are accessible only after a parent of that object has been requested. Once the local user is authorized and the local user's `member` object is requested, his `boards` will be accessible. Attributes of each board is requested, but relationships such as a `board`'s `lists` must be requested independently:
 
-    // This gets the |member| object corresponding to the local user
-    TRMember *localMember = [TRMember localMember];
+```objective-c
+// This gets the |member| object corresponding to the local user
+TRMember *localMember = [TRMember localMember];
+
+// This gets his boards.
+// Only attributes are available unless details had been requested before.
+NSSet *boards = localMember.boards;
+
+for (TRBoard *board in boards) {
+// NSLog(@"%i", board.lists.count) returns 0.
+
+// This gets the board's lists and their attributes
+[board getDetailsWithSuccess:^(TRManagedObject *object) {
+    TRBoard *detailedBoard = (TRBoard *)object;
     
-    // This gets his boards.
-    // Only attributes are available unless details had been requested before.
-    NSSet *boards = localMember.boards;
+    // Now lists of each board are available.
+    for (TRList *list in detailedBoard.lists) {
+        // NSLog(@"%i", list.cards.count) returns 0.
     
-    for (TRBoard *board in boards) {
-        // NSLog(@"%i", board.lists.count) returns 0.
-    
-        // This gets the board's lists and their attributes
-        [board getDetailsWithSuccess:^(TRManagedObject *object) {
-            TRBoard *detailedBoard = (TRBoard *)object;
-            
-            // Now lists of each board are available.
-            for (TRList *list in detailedBoard.lists) {
-                // NSLog(@"%i", list.cards.count) returns 0.
-            
-                [list getDetailsWithSuccess:^(TRManagedObject *object) {
-                    TRList *detailedList = (TRBoard *)object;
-                    // now attributes of cards in the list are available
-                }
-                                    failure:nil];
-            }
+        [list getDetailsWithSuccess:^(TRManagedObject *object) {
+            TRList *detailedList = (TRBoard *)object;
+            // now attributes of cards in the list are available
         }
-                             failure:nil]; // Failure is not an option! ;)
+                            failure:nil];
     }
-    
+}
+                     failure:nil]; // Failure is not an option! ;)
+}
+```
     
