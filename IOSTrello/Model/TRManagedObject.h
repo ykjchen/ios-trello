@@ -21,7 +21,7 @@
 /*!
  * Refreshes object by re-requesting it.
  */
-- (void)requestDetailsWithSuccess:(void (^)(TRManagedObject *object))success
+- (void)getDetailsWithSuccess:(void (^)(TRManagedObject *object))success
                           failure:(void (^)(NSError *error))failure;
 
 @end
