@@ -177,6 +177,9 @@ static TRManager *_sharedManager = nil;
     [managedObjectModel release];
     [managedObjectStore release];
 #endif
+    
+    NSEntityDescription *ed = [NSEntityDescription entityForName:@"TRMember" inManagedObjectContext:[self context]];
+    NSLog(@"attributes: %@", [ed.relationshipsByName allKeys]);
 }
 
 - (void)mapObjects
@@ -193,6 +196,14 @@ static TRManager *_sharedManager = nil;
 #if !__has_feature(objc_arc)
     [mapBuilder release];
 #endif
+}
+
+- (void)save
+{
+    NSError *error = nil;
+    if (![[self context] save:&error]) {
+        TRLog(@"Error saving context: %@", error.localizedDescription);
+    }
 }
 
 #pragma mark - Authorization with GTMOAuth

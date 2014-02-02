@@ -8,6 +8,9 @@
 
 #import "TRLaunchViewController.h"
 
+// view controllers
+#import "TRResourceViewController.h"
+
 // frameworks
 #import <QuartzCore/QuartzCore.h>
 
@@ -65,7 +68,7 @@
     [super viewDidLoad];
     
     self.navigationItem.title = @"TRLaunchViewController";
-    for (UIButton *button in @[self.authorizationButton, self.localMemberButton]) {
+    for (UIButton *button in @[self.authorizationButton, self.localMemberButton, self.viewMemberButton]) {
         button.layer.cornerRadius = self.authorizationButton.bounds.size.height * 0.25f;
     }
 }
@@ -94,6 +97,8 @@
         [self tappedAuthorizationButton];
     } else if (sender == self.localMemberButton) {
         [self tappedLocalMemberButton];
+    } else if (sender == self.viewMemberButton) {
+        [self tappedViewMemberButton];
     }
 }
 
@@ -109,6 +114,18 @@
     } failure:^(NSError *error) {
         NSLog(@"Failed to GET local member: %@", error.localizedDescription);
     }];
+}
+
+- (void)tappedViewMemberButton
+{
+    TRLog(@"tapped");
+    
+    TRMember *member = [TRMember localMember];
+    if (!member) {
+        TRLog(@"Local member not found.");
+    }
+    TRResourceViewController *viewController = [[TRResourceViewController alloc] initWithManagedObject:member];
+    [self.navigationController pushViewController:viewController animated:YES];
 }
 
 #pragma mark - OAuth

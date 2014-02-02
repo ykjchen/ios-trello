@@ -30,6 +30,11 @@
  */
 + (TRManager *)sharedManager;
 
+/*!
+ * Saves the managed object context.
+ */
+- (void)save;
+
 #pragma mark - Authorization to access user's Trello data
 @property (strong, nonatomic) void (^authorizationHandler)(BOOL isAuthorized, NSError *error);
 - (UIViewController *)authorizationViewController;

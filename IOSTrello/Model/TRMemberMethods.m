@@ -48,6 +48,9 @@ static NSDictionary *_requestParameters = nil;
 #if !__has_feature(objc_arc)
     [_localMember retain];
 #endif
+    
+    [[NSUserDefaults standardUserDefaults] setObject:member.identifier
+                                              forKey:TRUserDefaultLocalMemberId];
 }
 
 + (void)clearLocalMember
@@ -64,7 +67,7 @@ static NSDictionary *_requestParameters = nil;
 + (TRMember *)memberWithId:(NSString *)identifier
 {
     if (!identifier) {
-        return [self localMember];
+        return nil;
     }
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"identifier = %@", identifier];
     return [self memberWithPredicate:predicate];
