@@ -142,17 +142,17 @@ To save the NSManagedObjectContext (persist objects mapped by RestKit):
 ### Extending
 
 Support for other objects, attributes, and relationship can be easily added by modifying:  
+
 1. Core Data model: 
 [`TRModel.xcdatamodeld`](https://github.com/ykjchen/ios-trello/tree/master/IOSTrello/Model/TRModel.xcdatamodeld)  
 
 2. RestKit mapping definitions: [`Mappings.plist`](https://github.com/ykjchen/ios-trello/blob/master/IOSTrello/Model/Mappings.plist)  
-(See RKEntityMapping for more information)
+(See [`RKEntityMapping`](http://restkit.org/api/latest/Classes/RKEntityMapping.html) for more information)
 
-3. RestKit request parameters: 
+3. Trello request parameters: 
 [`Parameters.plist`](https://github.com/ykjchen/ios-trello/blob/master/IOSTrello/Model/Parameters.plist)  
-(See Trello API for more information)
+(See [Trello API Reference](https://trello.com/docs/api/index.html) for more information)
 
 4. RestKit routing parameters:
 [`Routes.plist`](https://github.com/ykjchen/ios-trello/blob/master/IOSTrello/Model/Routes.plist)  
-(See RKRoute for more information)
-
+(See [`RKRoute`](http://restkit.org/api/latest/Classes/RKRoute.html) for more information)
