@@ -47,19 +47,6 @@
 {
     self = [super initWithNibName:@"TRLaunchViewController" bundle:nil];
     if (self) {
-        // Custom initialization
-        [[TRManager sharedManager] setAuthorizationHandler:^(BOOL isAuthorized, NSError *error) {
-            if (isAuthorized)
-            {
-                NSLog(@"Authorized user: %@", [TRMember localMember]);
-                [self updateUI];
-            }
-            else
-            {
-                NSLog(@"Failed to authorize user: %@", error.localizedDescription);
-                [self hideAuthorizationViewController];
-            }
-        }];
     }
     return self;
 }
@@ -160,7 +147,19 @@
 
 - (void)showAuthorizationViewController
 {
-    UIViewController *viewController = [[TRManager sharedManager] authorizationViewController];
+    UIViewController *viewController = [[TRManager sharedManager] authorizationViewControllerWithCompletionHandler:^(BOOL isAuthorized, NSError *error) {
+        if (isAuthorized)
+        {
+            NSLog(@"Authorized user: %@", [TRMember localMember]);
+            [self updateUI];
+        }
+        else
+        {
+            NSLog(@"Failed to authorize user: %@", error.localizedDescription);
+            [self hideAuthorizationViewController];
+        }
+    }];
+    
     if (viewController) {
         [self.navigationController pushViewController:viewController animated:YES];
     }

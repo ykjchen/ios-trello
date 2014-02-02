@@ -29,6 +29,7 @@ NSString *const TRAPIServiceName = @"Trello";
 
 @interface TRManager ()
 
+@property (strong, nonatomic) void (^authorizationHandler)(BOOL isAuthorized, NSError *error);
 @property (strong, nonatomic) RKObjectManager *objectManager;
 @property (strong, nonatomic) GTMOAuthAuthentication *authentication;
 @property (strong, nonatomic) NSDictionary *mappings;
@@ -212,11 +213,19 @@ static TRManager *_sharedManager = nil;
     return (self.authentication && [self.authentication canAuthorize]);
 }
 
-- (UIViewController *)authorizationViewController
+- (UIViewController *)authorizationViewControllerWithCompletionHandler:(void (^)(BOOL isAuthorized, NSError *error))handler
 {
     if ([self isAuthorized]) {
         return nil;
     }
+    
+    if (self.authorizationHandler) {
+        TRLog(@"Cannot create a authorization view controller when a previous controller already exists.");
+        return nil;
+    }
+    
+    self.authorizationHandler = handler;
+    
     return [self authViewController];
 }
 
@@ -250,7 +259,8 @@ static TRManager *_sharedManager = nil;
 
 #pragma mark Private
 
-- (GTMOAuthAuthentication *)defaultAuthentication {
+- (GTMOAuthAuthentication *)defaultAuthentication
+{
     GTMOAuthAuthentication *auth = [[GTMOAuthAuthentication alloc] initWithSignatureMethod:kGTMOAuthSignatureMethodHMAC_SHA1
                                                                                consumerKey:API_DEVELOPER_KEY
                                                                                 privateKey:API_DEVELOPER_SECRET];
@@ -312,6 +322,7 @@ static TRManager *_sharedManager = nil;
         
         if (self.authorizationHandler) {
             self.authorizationHandler(NO, error);
+            self.authorizationHandler = nil;
         }
     } else {
         TRLog(@"Authorization succeeded.");
@@ -319,10 +330,12 @@ static TRManager *_sharedManager = nil;
         [TRMember getLocalMemberWithSuccess:^(TRMember *member) {
             if (self.authorizationHandler) {
                 self.authorizationHandler(YES, nil);
+                self.authorizationHandler = nil;
             }
         } failure:^(NSError *error) {
             if (self.authorizationHandler) {
                 self.authorizationHandler(NO, error);
+                self.authorizationHandler = nil;
             }
         }];
     }

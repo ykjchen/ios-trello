@@ -36,10 +36,33 @@
 - (void)save;
 
 #pragma mark - Authorization to access user's Trello data
-@property (strong, nonatomic) void (^authorizationHandler)(BOOL isAuthorized, NSError *error);
-- (UIViewController *)authorizationViewController;
+
+/*!
+ * Set |authorizationHandler| to respond to completion of the OAuth process.
+ * If the |isAuthorized| parameter is NO, |error| should be non-nil.
+ */
+
+/*!
+ * Get a view controller to present to the user to get his
+ * authorization to access his account.
+ */
+- (UIViewController *)authorizationViewControllerWithCompletionHandler:(void (^)(BOOL isAuthorized, NSError *error))handler;
+
+/*!
+ * Deauthorize the device from accessing the current user's account.
+ * (Note that this currently does not remove the application permission token from Trello)
+ */
 - (void)deauthorize;
+
+/*!
+ * Check if the device has access to a user's Trello account.
+ */
 - (BOOL)isAuthorized;
+
+/*!
+ * This returns the authorizationToken required for requests for
+ * private objects.
+ */
 - (NSString *)authorizationToken;
 
 @end
