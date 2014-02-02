@@ -44,18 +44,20 @@ iOS 5+ is supported. ARC and non-ARC are/will be supported.
 1. Log in to [trello.com](https://trello.com) and get a developer key and secret: https://trello.com/1/appKey/generate
 2. Enter the key and secret into [`TRSensitiveConfigs.h`](https://github.com/ykjchen/ios-trello/blob/master/IOSTrello/Resources/TRSensitiveConfigs.h).
 3. Get a OAuth view controller from the `TRManager` singleton to present to the user to get permission to access his Trello account. At the same time set a completion handler called when authorization completes or fails.
-        
-        UIViewController *viewController = [[TRManager sharedManager] authorizationViewControllerWithCompletionHandler:^(BOOL isAuthorized, NSError *error) {
-            if (isAuthorized) {
-                NSLog(@"Authorized user: %@", [TRMember localMember]);
-            } else {
-                NSLog(@"Failed to authorize user: %@", error.localizedDescription);
-            }
-        }];
-    
-        if (viewController) {
-            [self.navigationController pushViewController:viewController animated:YES];
-        }
+
+```objective-c        
+UIViewController *viewController = [[TRManager sharedManager] authorizationViewControllerWithCompletionHandler:^(BOOL isAuthorized, NSError *error) {
+    if (isAuthorized) {
+        NSLog(@"Authorized user: %@", [TRMember localMember]);
+    } else {
+        NSLog(@"Failed to authorize user: %@", error.localizedDescription);
+    }
+}];
+
+if (viewController) {
+    [self.navigationController pushViewController:viewController animated:YES];
+}
+```
  
 ##### Other authorization related messages you can send to `[TRManager sharedManager]`:
 
