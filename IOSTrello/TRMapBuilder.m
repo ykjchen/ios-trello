@@ -16,6 +16,7 @@
 @property (strong, nonatomic) void (^buildHandler)(BOOL success, NSError *error);
 @property (strong, nonatomic) RKObjectManager *objectManager;
 @property (strong, nonatomic) NSString *mappingDefinitionsFilename;
+@property (strong, nonatomic) NSString *routeDefinitionsFilename;
 @property (nonatomic, getter = isMappingComplete) BOOL mappingComplete;
 @property (strong, nonatomic) NSArray *mappingDefinitions;
 
@@ -31,18 +32,27 @@
     [_buildHandler release];
     [_objectManager release];
     [_mappingDefinitionsFilename release];
+    [_routeDefinitionsFilename release];
     [_mappingDefinitions release];
 }
 #endif
 
 #pragma mark - Public
 
-- (id)initWithFile:(NSString *)mappingDefinitionsFilename
-     objectManager:(RKObjectManager *)objectManager
+- (id)initWithMappingDefinitions:(NSString *)mappingDefinitionsFilename
+                routeDefinitions:(NSString *)routeDefinitionsFilename
+                   objectManager:(RKObjectManager *)objectManager
 {
     if (self = [super init]) {
         _mappingDefinitionsFilename = mappingDefinitionsFilename;
+        _routeDefinitionsFilename = routeDefinitionsFilename;
         _objectManager = objectManager;
+        
+#if !__has_feature(objc_arc)
+        [_mappingDefinitionsFilename retain];
+        [_routeDefinitionsFilename retain];
+        [_objectManager retain];
+#endif
     }
     return self;
 }
@@ -115,7 +125,22 @@
         }
     }
     
+    [self addRoutes];
+    
     [self completedMapping];
+}
+
+- (void)addRoutes
+{
+    NSString *path = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:self.routeDefinitionsFilename];
+    NSDictionary *routes = [NSDictionary dictionaryWithContentsOfFile:path];
+    
+    for (NSString *key in [routes allKeys]) {
+        RKRoute *route = [RKRoute routeWithClass:NSClassFromString(key)
+                                     pathPattern:routes[key]
+                                          method:RKRequestMethodAny];
+        [self.objectManager.router.routeSet addRoute:route];
+    }
 }
 
 - (void)completedMapping

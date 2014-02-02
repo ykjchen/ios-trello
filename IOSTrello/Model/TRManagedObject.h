@@ -43,8 +43,19 @@
 + (NSDictionary *)parametersWithParameters:(NSDictionary *)parameters;
 
 /*!
+ * Default parameters for an HTTP request.
+ */
++ (NSDictionary *)defaultGETParameters;
+
+/*!
  * Synchronizes the object with the server.
  */
 - (void)synchronize;
+
+/*!
+ * Refreshes object by re-requesting it.
+ */
+- (void)refreshWithSuccess:(void (^)(TRManagedObject *object))success
+                   failure:(void (^)(NSError *error))failure;
 
 @end

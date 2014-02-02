@@ -25,8 +25,9 @@
  * Pass in the filename of the mapping definition plist and
  * the RKObjectManager instance to which mappings should be added.
  */
-- (id)initWithFile:(NSString *)mappingDefinitionsFilename
-     objectManager:(RKObjectManager *)objectManager;
+- (id)initWithMappingDefinitions:(NSString *)mappingDefinitionsFilename
+                routeDefinitions:(NSString *)routeDefinitionsFilename
+                   objectManager:(RKObjectManager *)objectManager;
 
 /*!
  * Set the build completion handler to start mapping.

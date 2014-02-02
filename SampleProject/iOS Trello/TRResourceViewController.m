@@ -19,9 +19,23 @@
 @property (strong, nonatomic) TRManagedObject *managedObject;
 @property (strong, nonatomic) NSArray *sections;
 
+@property (strong, nonatomic) UIBarButtonItem *refreshBarButtonItem;
+@property (nonatomic, getter = isRefreshing) BOOL refreshing;
+
 @end
 
 @implementation TRResourceViewController
+
+#if !__has_feature(objc_arc)
+- (void)dealloc
+{
+    [_managedObject release];
+    [_sections release];
+    [_refreshBarButtonItem release];
+    
+    [super dealloc];
+}
+#endif
 
 - (id)init
 {
@@ -85,7 +99,12 @@
     [super viewDidLoad];
     
     self.navigationItem.title = [self navigationTitle];
-
+    
+    _refreshBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
+                                                                          target:self
+                                                                          action:@selector(refreshManagedObject)];
+    [self.navigationItem setRightBarButtonItem:_refreshBarButtonItem];
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
@@ -120,15 +139,19 @@
 #endif
         
         for (NSString *relationshipName in [relationshipsByName allKeys]) {
-            NSSet *set = [self.managedObject valueForKey:relationshipName];
+            id destination = [self.managedObject valueForKey:relationshipName];
 
             TRResourceTableSection *section = [[TRResourceTableSection alloc] init];
             section.relationshipName = relationshipName;
             section.sectionName = relationshipName;
             section.relationship = YES;
-            section.objects = [set allObjects];
-            if (set.count) {
-                id object = [set anyObject];
+            if ([destination isKindOfClass:[NSSet class]]) {
+                section.objects = [destination allObjects];
+            } else {
+                section.objects = @[destination];
+            }
+            if (section.objects.count) {
+                id object = section.objects[0];
                 section.titleKeyPath = [self.class titleKeyPathForManagedObject:object];
             }
             
@@ -142,6 +165,40 @@
         _sections = [[NSArray alloc] initWithArray:sections];
     }
     return _sections;
+}
+
+#pragma mark - TRManagedObject
+
+- (void)refreshManagedObject
+{
+    NSLog(@"start refresh");
+    
+    if (!self.managedObject) {
+        return;
+    }
+    
+    if (self.isRefreshing) {
+        return;
+    }
+    self.refreshing = YES;
+    self.refreshBarButtonItem.enabled = NO;
+    
+    [self.managedObject refreshWithSuccess:^(TRManagedObject *object) {
+        [self setSections:nil];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.sections.count)]
+                      withRowAnimation:UITableViewRowAnimationFade];
+        [self refreshCompleted];
+    } failure:^(NSError *error) {
+        [self refreshCompleted];
+    }];
+}
+
+- (void)refreshCompleted
+{
+    NSLog(@"end refresh");
+    
+    self.refreshing = NO;
+    self.refreshBarButtonItem.enabled = YES;
 }
 
 #pragma mark - Table view data source
@@ -183,8 +240,13 @@
     } else {
         title = object;
     }
-    
     cell.textLabel.text = title;
+    
+    NSString *subtitle = nil;
+    if (!section.isRelationship) {
+        subtitle = [NSString stringWithFormat:@"%@", [self.managedObject valueForKey:object]];
+    }
+    cell.detailTextLabel.text = subtitle;
     
     return cell;
 }
@@ -264,5 +326,17 @@
 @end
 
 @implementation TRResourceTableSection
+
+#if !__has_feature(objc_arc)
+- (void)dealloc
+{
+    [_relationshipName release];
+    [_sectionName release];
+    [_objects release];
+    [_titleKeyPath release];
+    
+    [super dealloc];
+}
+#endif
 
 @end

@@ -22,7 +22,7 @@
 		<key>lists</key>
 		<string>all</string>
 		<key>list_fields</key>
-		<string></string>
+		<string>name,closed,pos</string>
 	</dict>
 </dict>
 </plist>

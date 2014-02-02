@@ -8,6 +8,7 @@
 
 #import "TRManagedObject.h"
 
+@class TRList;
 @interface TRCard : TRManagedObject
 
 @property (nonatomic, retain) NSString * identifier;
@@ -18,6 +19,6 @@
 @property (nonatomic, retain) NSString * desc;
 @property (nonatomic, retain) NSNumber * pos;
 @property (nonatomic, retain) NSDate * due;
-@property (nonatomic, retain) NSManagedObject *list;
+@property (nonatomic, retain) TRList *list;
 
 @end

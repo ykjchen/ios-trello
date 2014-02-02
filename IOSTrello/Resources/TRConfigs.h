@@ -14,6 +14,11 @@
 #define REQUEST_PARAMETERS_FILENAME @"Parameters.plist"
 
 /*!
+ * This file contains the routes used to convert objects to urls.
+ */
+#define ROUTE_DEFINITIONS_FILENAME @"Routes.plist"
+
+/*!
  * This is the Trello API's base url.
  */
 #define API_BASE_URL @"https://api.trello.com/1/"

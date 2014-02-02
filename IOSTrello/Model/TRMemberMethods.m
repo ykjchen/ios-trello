@@ -88,16 +88,6 @@ static NSDictionary *_requestParameters = nil;
 
 #pragma mark - Requesting
 
-+ (NSDictionary *)requestParameters
-{
-    if (!_requestParameters) {
-        NSString *path = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:REQUEST_PARAMETERS_FILENAME];
-        NSDictionary *parameters = [NSDictionary dictionaryWithContentsOfFile:path];
-        _requestParameters = [[NSDictionary alloc] initWithDictionary:parameters[@"TRMember"]];
-    }
-    return _requestParameters;
-}
-
 + (void)getLocalMemberWithSuccess:(void (^)(TRMember *))success
                           failure:(void (^)(NSError *))failure
 {
@@ -106,7 +96,7 @@ static NSDictionary *_requestParameters = nil;
     
     [[self objectManager] getObject:nil
                              path:@"members/me"
-                       parameters:[self parametersWithParameters:[self requestParameters]]
+                       parameters:[self defaultGETParameters]
                           success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                               TRMember *member = [mappingResult firstObject];
                               [self setLocalMember:member];
@@ -125,7 +115,7 @@ static NSDictionary *_requestParameters = nil;
     NSString *path = [NSString stringWithFormat:@"members/%@", identifier];
     [[self objectManager] getObject:nil
                                path:path
-                         parameters:[self parametersWithParameters:[self requestParameters]]
+                         parameters:[self defaultGETParameters]
                             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                 success([mappingResult firstObject]);
                             } failure:^(RKObjectRequestOperation *operation, NSError *error) {

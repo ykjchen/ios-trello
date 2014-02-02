@@ -88,6 +88,13 @@ static RKObjectManager *_objectManager = nil;
     return result;
 }
 
++ (NSDictionary *)requestParametersForEntity:(NSString *)entityName;
+{
+    NSString *path = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:REQUEST_PARAMETERS_FILENAME];
+    NSDictionary *parameters = [NSDictionary dictionaryWithContentsOfFile:path];
+    return parameters[entityName];
+}
+
 + (NSDictionary *)parametersWithParameters:(NSDictionary *)parameters
 {
     NSMutableDictionary *authorizationParameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:
@@ -99,9 +106,28 @@ static RKObjectManager *_objectManager = nil;
     return [NSDictionary dictionaryWithDictionary:authorizationParameters];
 }
 
++ (NSDictionary *)defaultGETParameters
+{
+    return [self parametersWithParameters:[self requestParametersForEntity:[self description]]];
+}
+
 - (void)synchronize
 {
     
+}
+
+- (void)refreshWithSuccess:(void (^)(TRManagedObject *))success
+                   failure:(void (^)(NSError *))failure
+{
+    [[self.class objectManager] getObject:self
+                                     path:nil
+                               parameters:[self.class defaultGETParameters]
+                                  success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                      success([mappingResult firstObject]);
+                                  } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                      TRLog(@"Error refreshing: %@", error);
+                                      failure(error);
+                                  }];
 }
 
 @end

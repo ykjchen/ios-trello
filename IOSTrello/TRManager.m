@@ -184,8 +184,9 @@ static TRManager *_sharedManager = nil;
 
 - (void)mapObjects
 {
-    TRMapBuilder *mapBuilder = [[TRMapBuilder alloc] initWithFile:MAPPING_DEFINITIONS_FILENAME
-                                                    objectManager:self.objectManager];
+    TRMapBuilder *mapBuilder = [[TRMapBuilder alloc] initWithMappingDefinitions:MAPPING_DEFINITIONS_FILENAME
+                                                               routeDefinitions:ROUTE_DEFINITIONS_FILENAME
+                                                                  objectManager:self.objectManager];
     
     [mapBuilder setBuildHandler:^(BOOL success, NSError *error) {
         if (!success) {

@@ -29,6 +29,8 @@
 		7C4F048B189D476400B3769D /* TRCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C4F048A189D476400B3769D /* TRCard.m */; };
 		7C4F048E189D476400B3769D /* TRList.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C4F048D189D476400B3769D /* TRList.m */; };
 		7C4F0491189DC2B100B3769D /* TRResourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C4F0490189DC2B100B3769D /* TRResourceViewController.m */; };
+		7C4F0494189E10A100B3769D /* reload_24x28.png in Resources */ = {isa = PBXBuildFile; fileRef = 7C4F0493189E10A100B3769D /* reload_24x28.png */; };
+		7C4F0496189E14A700B3769D /* Routes.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7C4F0495189E14A700B3769D /* Routes.plist */; };
 		7CD67FD91894EE01003F32C0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD67FD81894EE01003F32C0 /* Foundation.framework */; };
 		7CD67FDB1894EE01003F32C0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD67FDA1894EE01003F32C0 /* CoreGraphics.framework */; };
 		7CD67FDD1894EE01003F32C0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD67FDC1894EE01003F32C0 /* UIKit.framework */; };
@@ -90,6 +92,8 @@
 		7C4F048D189D476400B3769D /* TRList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRList.m; sourceTree = "<group>"; };
 		7C4F048F189DC2B100B3769D /* TRResourceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRResourceViewController.h; sourceTree = "<group>"; };
 		7C4F0490189DC2B100B3769D /* TRResourceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRResourceViewController.m; sourceTree = "<group>"; };
+		7C4F0493189E10A100B3769D /* reload_24x28.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = reload_24x28.png; sourceTree = "<group>"; };
+		7C4F0495189E14A700B3769D /* Routes.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Routes.plist; sourceTree = "<group>"; };
 		7CD67FD51894EE01003F32C0 /* iOS Trello.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS Trello.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CD67FD81894EE01003F32C0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		7CD67FDA1894EE01003F32C0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -176,6 +180,7 @@
 			children = (
 				7C4F0459189C0E7500B3769D /* Mappings.plist */,
 				7C4F0481189D195E00B3769D /* Parameters.plist */,
+				7C4F0495189E14A700B3769D /* Routes.plist */,
 				7C4F0473189CBBD800B3769D /* TRManagedObject.h */,
 				7C4F0474189CBBD800B3769D /* TRManagedObject.m */,
 				7C4F0483189D476300B3769D /* TRMember.h */,
@@ -204,6 +209,14 @@
 				7C4F047F189D024300B3769D /* TRHelpers.m */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		7C4F0492189E103D00B3769D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				7C4F0493189E10A100B3769D /* reload_24x28.png */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		7CD67FCC1894EE01003F32C0 = {
@@ -263,6 +276,7 @@
 		7CD67FDF1894EE01003F32C0 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				7C4F0492189E103D00B3769D /* Resources */,
 				7CD67FE01894EE01003F32C0 /* iOS Trello-Info.plist */,
 				7CD67FE11894EE01003F32C0 /* InfoPlist.strings */,
 				7CD67FE41894EE01003F32C0 /* main.m */,
@@ -366,8 +380,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CD67FE31894EE01003F32C0 /* InfoPlist.strings in Resources */,
+				7C4F0494189E10A100B3769D /* reload_24x28.png in Resources */,
 				7C4F0482189D195E00B3769D /* Parameters.plist in Resources */,
 				7CD67FEB1894EE01003F32C0 /* Images.xcassets in Resources */,
+				7C4F0496189E14A700B3769D /* Routes.plist in Resources */,
 				7CF0A818189AADB700BF4CD2 /* TRLaunchViewController.xib in Resources */,
 				7C4F0469189C0E7500B3769D /* Mappings.plist in Resources */,
 			);
