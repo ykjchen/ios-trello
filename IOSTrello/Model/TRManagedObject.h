@@ -19,48 +19,9 @@
 + (void)setObjectManager:(RKObjectManager *)objectManager;
 
 /*!
- * Getter for the class' RKObjectManager instance.
- */
-+ (RKObjectManager *)objectManager;
-
-/*!
- * Getter for the class' NSManagedObjectContext instance.
- */
-+ (NSManagedObjectContext *)context;
-
-/*!
- * Fetching object from the class' objectManager's store's context.
- */
-+ (NSArray *)fetchObjectsForKey:(NSString *)key
-                      predicate:(id)predicate
-                 sortDescriptor:(NSString *)sortDescriptor
-                  sortAscending:(BOOL)sortAscending
-                     fetchLimit:(NSUInteger)fetchLimit;
-
-/*!
- * This adds authorization parameters onto the passed in parameters.
- */
-+ (NSDictionary *)parametersWithParameters:(NSDictionary *)parameters;
-
-/*!
- * Default parameters for an HTTP request.
- */
-+ (NSDictionary *)defaultGETParameters;
-
-/*!
- * Synchronizes the object with the server.
- */
-- (void)synchronize;
-
-/*!
  * Refreshes object by re-requesting it.
  */
-- (void)refreshWithSuccess:(void (^)(TRManagedObject *object))success
-                   failure:(void (^)(NSError *error))failure;
-
-/*!
- * Get all objects of this Entity.
- */
-+ (NSArray *)allObjects;
+- (void)requestDetailsWithSuccess:(void (^)(TRManagedObject *object))success
+                          failure:(void (^)(NSError *error))failure;
 
 @end

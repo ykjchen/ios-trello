@@ -183,7 +183,7 @@
     self.refreshing = YES;
     self.refreshBarButtonItem.enabled = NO;
     
-    [self.managedObject refreshWithSuccess:^(TRManagedObject *object) {
+    [self.managedObject requestDetailsWithSuccess:^(TRManagedObject *object) {
         [self setSections:nil];
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.sections.count)]
                       withRowAnimation:UITableViewRowAnimationFade];

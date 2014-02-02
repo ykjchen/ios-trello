@@ -9,7 +9,6 @@
 #import "TRMember.h"
 #import "TRBoard.h"
 
-
 @implementation TRMember
 
 @dynamic bio;

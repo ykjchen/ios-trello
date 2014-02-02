@@ -94,6 +94,7 @@
 		7C4F0490189DC2B100B3769D /* TRResourceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRResourceViewController.m; sourceTree = "<group>"; };
 		7C4F0493189E10A100B3769D /* reload_24x28.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = reload_24x28.png; sourceTree = "<group>"; };
 		7C4F0495189E14A700B3769D /* Routes.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Routes.plist; sourceTree = "<group>"; };
+		7C4F0497189E4D4E00B3769D /* TRManagedObjectSubclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRManagedObjectSubclass.h; sourceTree = "<group>"; };
 		7CD67FD51894EE01003F32C0 /* iOS Trello.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS Trello.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CD67FD81894EE01003F32C0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		7CD67FDA1894EE01003F32C0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -183,6 +184,7 @@
 				7C4F0495189E14A700B3769D /* Routes.plist */,
 				7C4F0473189CBBD800B3769D /* TRManagedObject.h */,
 				7C4F0474189CBBD800B3769D /* TRManagedObject.m */,
+				7C4F0497189E4D4E00B3769D /* TRManagedObjectSubclass.h */,
 				7C4F0483189D476300B3769D /* TRMember.h */,
 				7C4F0484189D476300B3769D /* TRMember.m */,
 				7C4F0486189D476400B3769D /* TRBoard.h */,

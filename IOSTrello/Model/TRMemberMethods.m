@@ -7,6 +7,7 @@
 //
 
 #import "TRMemberMethods.h"
+#import "TRManagedObjectSubclass.h"
 
 #import <RestKit/RestKit.h>
 #import "TRConfigs.h"
