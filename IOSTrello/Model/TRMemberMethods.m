@@ -32,6 +32,8 @@ static NSDictionary *_requestParameters = nil;
 #if !__has_feature(objc_arc)
             [_localMember retain];
 #endif
+        } else {
+            TRLog(@"Local member with identifer not found: %@", identifier);
         }
     }
     return _localMember;
@@ -69,7 +71,7 @@ static NSDictionary *_requestParameters = nil;
     if (!identifier) {
         return nil;
     }
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"identifier = %@", identifier];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"identifier == %@", identifier];
     return [self memberWithPredicate:predicate];
 }
 
@@ -91,7 +93,6 @@ static NSDictionary *_requestParameters = nil;
 + (void)getLocalMemberWithSuccess:(void (^)(TRMember *))success
                           failure:(void (^)(NSError *))failure
 {
-    TRLog(@"TRMember class : %@", self);
     NSAssert([self objectManager], @"Class' objectManager not set.");
     
     [[self objectManager] getObject:nil

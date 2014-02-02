@@ -17,3 +17,44 @@ void TRFormattedLog(NSString *format, ...) {
     
     NSLog(@"%@", msg);
 }
+
+NSString *TRPathForFileInDirectory(NSString *fileName, NSSearchPathDirectory nsspd)
+{
+    NSArray *directories = NSSearchPathForDirectoriesInDomains(nsspd, NSUserDomainMask, YES);
+    NSString *directory = [directories objectAtIndex:0];
+    
+    if (fileName == nil) {
+        return directory;
+    } else {
+        return [directory stringByAppendingPathComponent:fileName];
+    }
+}
+
+NSString *TRPathInDataDirectory(NSString *fileName)
+{
+    NSString *libraryDirectory = TRPathForFileInDirectory(nil, NSLibraryDirectory);
+    NSString *dataDirectory = [libraryDirectory stringByAppendingPathComponent:@"TRData"];
+    BOOL isDir;
+    if (![[NSFileManager defaultManager] fileExistsAtPath:dataDirectory isDirectory:&isDir]) {
+        NSError *error = nil;
+        if (![[NSFileManager defaultManager] createDirectoryAtPath:dataDirectory
+                                       withIntermediateDirectories:YES
+                                                        attributes:nil
+                                                             error:&error]) {
+#if DEBUG
+            NSLog(@"Error: could not create data directory path (%@)", error.localizedDescription);
+#endif
+        }
+    } else if (!isDir) {
+#if DEBUG
+        NSLog(@"Error: file at data directory path is not a directory.");
+#endif
+        return nil;
+    }
+    
+    if (fileName == nil) {
+        return dataDirectory;
+    } else {
+        return [dataDirectory stringByAppendingPathComponent:fileName];
+    }
+}

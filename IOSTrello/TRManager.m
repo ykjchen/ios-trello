@@ -147,26 +147,24 @@ static TRManager *_sharedManager = nil;
     NSString *modelPath = [[NSBundle mainBundle] pathForResource:@"TRModel" ofType:@"mom" inDirectory:@"TRModel.momd"];
     NSURL *modelURL = [NSURL fileURLWithPath:modelPath];
     NSManagedObjectModel *managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-    RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:managedObjectModel];
     
-    NSError *error = nil;
-    BOOL success = RKEnsureDirectoryExistsAtPath(RKApplicationDataDirectory(), &error);
-    if (! success) {
-        RKLogError(@"Failed to create Application Data Directory at path '%@': %@", RKApplicationDataDirectory(), error);
+    NSPersistentStoreCoordinator *persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
+    
+    NSString *storePath = TRPathInDataDirectory(@"TRStore.sqlite");
+    NSURL *storeUrl = [NSURL fileURLWithPath:storePath];
+    NSError *storeError = nil;
+    if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
+                                                  configuration:nil
+                                                            URL:storeUrl
+                                                        options:nil
+                                                          error:&storeError]) {
+        TRLog(@"Error adding persistent store: %@.", storeError.localizedDescription);
     }
+#warning disable iCloud backup of the store to conform with iTunes guidelines
+    /* Need to set a resource value on the SQLite file backing the persistent store for the `NSURLIsExcludedFromBackupKey` key set to `YES` to exclude the SQLite file from being backed up by iCloud to conform with the ["iOS Data Storage Guidelines"](https://developer.apple.com/icloud/documentation/data-storage/) */
     
-    NSString *path = [RKApplicationDataDirectory() stringByAppendingPathComponent:@"Store.sqlite"];
-    
-#ifdef DEBUG
-    if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
-        [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];
-    }
-#endif
+    RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithPersistentStoreCoordinator:persistentStoreCoordinator];
 
-    NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:path fromSeedDatabaseAtPath:nil withConfiguration:nil options:nil error:&error];
-    if (! persistentStore) {
-        RKLogError(@"Failed adding persistent store at path '%@': %@", path, error);
-    }
     [managedObjectStore createManagedObjectContexts];
     
     self.objectManager.managedObjectStore = managedObjectStore;
@@ -175,11 +173,9 @@ static TRManager *_sharedManager = nil;
     
 #if !__has_feature(objc_arc)
     [managedObjectModel release];
+    [persistentStoreCoordinator release;]
     [managedObjectStore release];
 #endif
-    
-    NSEntityDescription *ed = [NSEntityDescription entityForName:@"TRMember" inManagedObjectContext:[self context]];
-    NSLog(@"attributes: %@", [ed.relationshipsByName allKeys]);
 }
 
 - (void)mapObjects
@@ -201,9 +197,11 @@ static TRManager *_sharedManager = nil;
 
 - (void)save
 {
-    NSError *error = nil;
-    if (![[self context] save:&error]) {
-        TRLog(@"Error saving context: %@", error.localizedDescription);
+    NSError *mainQueueError = nil;
+    if (![[self context] saveToPersistentStore:&mainQueueError]) {
+        TRLog(@"Error saving main queue context: %@", mainQueueError.localizedDescription);
+    } else {
+        TRLog(@"Successfully saved main queue context.");
     }
 }
 

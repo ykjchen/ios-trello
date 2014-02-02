@@ -14,6 +14,11 @@
 #if DEBUG
 #define TRLog(format, ...) TRFormattedLog(@"<%@:%@> %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [NSString stringWithFormat:(format), ##__VA_ARGS__])
 #else
-#define JCLog(format, ...)
+#define TRLog(format, ...)
 #endif
 void TRFormattedLog(NSString *format, ...);
+
+/*!
+ * Returns the path of a file in the application data directory.
+ */
+NSString *TRPathInDataDirectory(NSString *fileName);

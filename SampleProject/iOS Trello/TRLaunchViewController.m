@@ -52,6 +52,7 @@
             if (isAuthorized)
             {
                 NSLog(@"Authorized user: %@", [TRMember localMember]);
+                [self updateUI];
             }
             else
             {
@@ -68,7 +69,7 @@
     [super viewDidLoad];
     
     self.navigationItem.title = @"TRLaunchViewController";
-    for (UIButton *button in @[self.authorizationButton, self.localMemberButton, self.viewMemberButton]) {
+    for (UIButton *button in @[self.authorizationButton, self.localMemberButton]) {
         button.layer.cornerRadius = self.authorizationButton.bounds.size.height * 0.25f;
     }
 }
@@ -89,6 +90,14 @@
         [self.authorizationButton setTitle:@"Authorize"
                                   forState:UIControlStateNormal];
     }
+    
+    if ([TRMember localMember]) {
+        [self.localMemberButton setTitle:@"View Local Member"
+                                forState:UIControlStateNormal];
+    } else {
+        [self.localMemberButton setTitle:@"GET Local Member"
+                                forState:UIControlStateNormal];
+    }
 }
 
 - (void)tapped:(id)sender
@@ -97,29 +106,38 @@
         [self tappedAuthorizationButton];
     } else if (sender == self.localMemberButton) {
         [self tappedLocalMemberButton];
-    } else if (sender == self.viewMemberButton) {
-        [self tappedViewMemberButton];
     }
 }
 
 - (void)tappedLocalMemberButton
 {
+    if ([TRMember localMember]) {
+        [self viewLocalMember];
+    } else {
+        [self getLocalMember];
+    }
+}
+
+- (void)getLocalMember
+{
     [TRMember getLocalMemberWithSuccess:^(TRMember *member) {
-        NSLog(@"GET local member:%@ boards:%i", member, member.boards.count);
-        if (member.boards.count) {
-            for (TRBoard *board in member.boards) {
-                NSLog(@"    board: %@", board);
-            }
-        }
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success"
+                                                        message:@"Requested local member. Tap View Local Member for details."
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        [self updateUI];
+        
+#if !__has_feature(objc_arc)
+        [alert release];
+#endif
     } failure:^(NSError *error) {
         NSLog(@"Failed to GET local member: %@", error.localizedDescription);
     }];
 }
 
-- (void)tappedViewMemberButton
+- (void)viewLocalMember
 {
-    TRLog(@"tapped");
-    
     TRMember *member = [TRMember localMember];
     if (!member) {
         TRLog(@"Local member not found.");

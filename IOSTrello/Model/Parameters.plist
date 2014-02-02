@@ -24,5 +24,19 @@
 		<key>list_fields</key>
 		<string>name,closed,pos</string>
 	</dict>
+	<key>TRList</key>
+	<dict>
+		<key>fields</key>
+		<string>name,closed,pos</string>
+		<key>cards</key>
+		<string>all</string>
+		<key>card_fields</key>
+		<string>closed,name,comments,labels,desc,pos,due</string>
+	</dict>
+	<key>TRCard</key>
+	<dict>
+		<key>fields</key>
+		<string>closed,name,comments,labels,desc,pos,due</string>
+	</dict>
 </dict>
 </plist>

@@ -16,7 +16,6 @@
 
 @property (strong, nonatomic) IBOutlet UIButton *authorizationButton;
 @property (strong, nonatomic) IBOutlet UIButton *localMemberButton;
-@property (strong, nonatomic) IBOutlet UIButton *viewMemberButton;
 
 - (IBAction)tapped:(id)sender;
 

@@ -58,4 +58,9 @@
 - (void)refreshWithSuccess:(void (^)(TRManagedObject *object))success
                    failure:(void (^)(NSError *error))failure;
 
+/*!
+ * Get all objects of this Entity.
+ */
++ (NSArray *)allObjects;
+
 @end

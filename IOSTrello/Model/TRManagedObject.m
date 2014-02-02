@@ -130,4 +130,13 @@ static RKObjectManager *_objectManager = nil;
                                   }];
 }
 
++ (NSArray *)allObjects
+{
+    return [self fetchObjectsForKey:[self description]
+                          predicate:nil
+                     sortDescriptor:nil
+                      sortAscending:NO
+                         fetchLimit:0];
+}
+
 @end
