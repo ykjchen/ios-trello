@@ -1,9 +1,9 @@
 ios-trello
 ==========
 
-This project is an iOS wrapper for the [Trello REST API](https://trello.com/docs/index.html), making good use of [RestKit](http://restkit.org/).
+This project is an iOS wrapper for the [Trello REST API](https://trello.com/docs/index.html), making good use of [RestKit](http://restkit.org/). The interface should be considered unstable as the project is early in development. Currently, only `members`, `boards`, `lists`, and `cards` can be requested. The requested objects are mapped to a local Core Data store. A sample project is included as a demo.
 
-ARC and non-ARC are/will be supported.
+iOS 5+ is supported. ARC and non-ARC are/will be supported.
 
 ### Add to your project
 
@@ -14,6 +14,7 @@ ARC and non-ARC are/will be supported.
 
 ##### Source
 1. ios-trello directory: `IOSTrello`
+2. headers for RestKit and GTMOAuth: `Libraries/Headers`
 
 #### Build Settings
 ##### Link  Binary With Libraries:
