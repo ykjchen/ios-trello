@@ -29,7 +29,7 @@ NSString *const TRAPIServiceName = @"Trello";
 
 @interface TRManager ()
 
-@property (strong, nonatomic) void (^authorizationHandler)(BOOL isAuthorized, NSError *error);
+@property (nonatomic, copy) void (^authorizationHandler)(BOOL isAuthorized, NSError *error);
 @property (strong, nonatomic) RKObjectManager *objectManager;
 @property (strong, nonatomic) GTMOAuthAuthentication *authentication;
 @property (strong, nonatomic) NSDictionary *mappings;

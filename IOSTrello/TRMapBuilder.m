@@ -13,7 +13,7 @@
 
 @interface TRMapBuilder ()
 
-@property (strong, nonatomic) void (^buildHandler)(BOOL success, NSError *error);
+@property (nonatomic, copy) void (^buildHandler)(BOOL success, NSError *error);
 @property (strong, nonatomic) RKObjectManager *objectManager;
 @property (strong, nonatomic) NSString *mappingDefinitionsFilename;
 @property (strong, nonatomic) NSString *routeDefinitionsFilename;
